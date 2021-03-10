@@ -1,3 +1,3 @@
-# CombineBLoC
+# CombineBLoC 0.1.0
 
-A description of this package.
+A first draft for a BLoC (Business Logic Component) built with Combine for SwiftUI.
