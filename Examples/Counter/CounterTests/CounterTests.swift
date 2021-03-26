@@ -4,6 +4,7 @@
 //
 //  Created by Wellington Soares on 23/03/21.
 //
+import Combine
 import CombineBloc
 import XCTest
 @testable import Counter
@@ -12,46 +13,31 @@ class CounterTests: XCTestCase {
 
     func testInitialState(){
         let counterBloc = CounterBloc()
-        XCTAssertEqual(counterBloc.state,CounterState(count:0))
+        XCTAssertEqual(counterBloc.value,CounterState(count:0))
     }
 
     func testIncrement(){
         let counterBloc = CounterBloc()
-        counterBloc.send(.increment)
-        XCTAssertEqual(counterBloc.state,CounterState(count:1))
-        counterBloc.send(.increment)
-        XCTAssertEqual(counterBloc.state,CounterState(count:2))
+        Just(.increment).subscribe(counterBloc)
+        XCTAssertEqual(counterBloc.value,CounterState(count:1))
+        Just(.increment).subscribe(counterBloc)
+        XCTAssertEqual(counterBloc.value,CounterState(count:2))
     }
 
-    func testDecrement(){
+    func testIncrementSequence(){
         let counterBloc = CounterBloc()
-        counterBloc.send(.decrement)
-        XCTAssertEqual(counterBloc.state,CounterState(count:-1))
-        counterBloc.send(.decrement)
-        XCTAssertEqual(counterBloc.state,CounterState(count:-2))
+        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc)
+        XCTAssertEqual(counterBloc.value,CounterState(count:4))
+        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc)
+        XCTAssertEqual(counterBloc.value,CounterState(count:8))
     }
-//
-//
-//
-//
-//    override func setUpWithError() throws {
-//        // Put setup code here. This method is called before the invocation of each test method in the class.
-//    }
-//
-//    override func tearDownWithError() throws {
-//        // Put teardown code here. This method is called after the invocation of each test method in the class.
-//    }
-//
-//    func testExample() throws {
-//        // This is an example of a functional test case.
-//        // Use XCTAssert and related functions to verify your tests produce the correct results.
-//    }
-//
-//    func testPerformanceExample() throws {
-//        // This is an example of a performance test case.
-//        self.measure {
-//            // Put the code you want to measure the time of here.
-//        }
-//    }
+
+    func testDecrementSequence(){
+        let counterBloc = CounterBloc()
+        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc)
+        XCTAssertEqual(counterBloc.value,CounterState(count:-4))
+        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc)
+        XCTAssertEqual(counterBloc.value,CounterState(count:-8))
+    }
 
 }

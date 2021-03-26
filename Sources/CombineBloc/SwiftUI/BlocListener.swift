@@ -1,6 +1,6 @@
 //
 //  BlocListener.swift
-//  
+//
 //
 //  Created by Wellington Soares on 23/03/21.
 //
@@ -14,7 +14,7 @@ public struct BlocListener<Event:Equatable, BlocState:Equatable, Content: View>:
     private let builder: () -> Content
 
     public var body: some View {
-        return builder().onReceive(bloc.transition, perform: {
+        return builder().onReceive(bloc.transitions, perform: {
             transition in
             action(transition) })
     }

@@ -5,37 +5,86 @@
 //
 import Combine
 
-open class Bloc<Event:Equatable, State:Equatable> {
+private final class BlocStateSubscription<State, S: Subscriber>: Subscription where S.Input == State {
 
-    @Published private(set) public var state: State
+    init(statePublisher: AnyPublisher<State, Never>, subscriber: S) {
 
-    public var transition: AnyPublisher<Transition<Event, State>, Never> { transitionSubject.eraseToAnyPublisher() }
-    public var event: AnyPublisher<Event, Never> { eventSubject.eraseToAnyPublisher() }
+        self.cancellable = statePublisher.sink { state in
+            _ = subscriber.receive(state)
+        }
+    }
 
-    private let transitionSubject = PassthroughSubject<Transition<Event, State>, Never>()
-    private let eventSubject = PassthroughSubject<Event, Never>()
+    func request(_ demand: Subscribers.Demand) { }
 
-    private var bag = Set<AnyCancellable>()
-    private let mapEventToState: ((Event, State, @escaping (State) -> ()) -> ())
+    func cancel() {
+        cancellable?.cancel()
+        cancellable = nil
+    }
 
-    final public func send(_ value: Event) { eventSubject.send(value) }
+    var cancellable: AnyCancellable?
+
+}
+
+
+open class Bloc<Event:Equatable, State:Equatable>: Publisher, Subscriber{
+
+    public typealias Input = Event
+    public typealias Output = State
+    public typealias Failure = Never
 
     public init(initialValue: State, mapEventToState: @escaping (Event, State, @escaping (State) -> ()) -> ()) {
-        self.state = initialValue
+        self.value = initialValue
         self.mapEventToState = mapEventToState
 
         eventSubject.sink {
             event in
-            self.mapEventToState(event, self.state) { newState in
-                if(newState != self.state) {
-                    self.transitionSubject.send(Transition(currentState: self.state, event: event, nextState: newState))
-                    self.state = newState
+            self.mapEventToState(event, self.value) { newState in
+                if(newState != self.value) {
+                    self.transitionSubject.send(Transition(currentState: self.value, event: event, nextState: newState))
+                    self.value = newState
+                    self.stateSubject.send(self.value)
                 }
             }
         }.store(in: &bag)
     }
+//
+//    final public func send(_ input: Event) { eventSubject.send(input) }
+//
+//    final public func send(subscription: Subscription) {
+//        eventSubject.send(subscription: subscription)
+//    }
+//
+//    final public func send(completion: Subscribers.Completion<Failure>) {
+//    }
 
-    func cancel() {
+    final public func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, State == S.Input {
+        subscriber.receive(subscription: BlocStateSubscription(statePublisher: statePublisher, subscriber: subscriber))
+    }
+
+    final public func receive(completion: Subscribers.Completion<Never>) {}
+
+    final public func receive(_ input: Event) -> Subscribers.Demand {
+        eventSubject.send(input)
+        return .unlimited
+    }
+
+    final public func receive(subscription: Subscription) {
+        subscription.request(.unlimited)
+    }
+
+    private(set) public var value: State
+    public var transitions: AnyPublisher<Transition<Event, State>, Never> { transitionSubject.eraseToAnyPublisher() }
+
+    private var statePublisher: AnyPublisher<State, Never> { stateSubject.eraseToAnyPublisher() }
+    private let transitionSubject = PassthroughSubject<Transition<Event, State>, Never>()
+    private let eventSubject = PassthroughSubject<Event, Never>()
+    private let stateSubject = PassthroughSubject<State, Never>()
+    
+
+    private var bag = Set<AnyCancellable>()
+    private let mapEventToState: ((Event, State, @escaping (State) -> ()) -> ())
+
+    open func cancel() {
         bag.forEach { sub in
             sub.cancel()
         }
@@ -45,15 +94,15 @@ open class Bloc<Event:Equatable, State:Equatable> {
 
 public extension Bloc {
     func debug(onEvent: ((Event) -> ())? = nil, onState: ((State) -> ())? = nil, onTransition: ((Transition<Event, State>) -> ())? = nil) -> Bloc<Event, State> {
-        self.event.sink { event in
+        self.eventSubject.sink { event in
             onEvent?(event)
         }.store(in: &bag)
 
-        self.$state.sink { state in
+        self.sink { state in
             onState?(state)
         }.store(in: &bag)
 
-        self.transition.sink { transition in
+        self.transitions.sink { transition in
             onTransition?(transition)
         }.store(in: &bag)
         return self

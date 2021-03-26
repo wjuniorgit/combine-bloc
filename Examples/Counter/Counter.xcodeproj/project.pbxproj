@@ -83,10 +83,10 @@
 		55DECF2C260A933700F29993 /* Counter */ = {
 			isa = PBXGroup;
 			children = (
-				55DECF2D260A933700F29993 /* CounterApp.swift */,
 				55DECF31260A933A00F29993 /* Assets.xcassets */,
-				55DECF36260A933A00F29993 /* Info.plist */,
+				55DECF2D260A933700F29993 /* CounterApp.swift */,
 				55558FD3260A948100135F57 /* CounterBloc.swift */,
+				55DECF36260A933A00F29993 /* Info.plist */,
 			);
 			path = Counter;
 			sourceTree = "<group>";

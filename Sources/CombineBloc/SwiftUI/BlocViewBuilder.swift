@@ -1,6 +1,6 @@
 //
 //  BlocViewBuilder.swift
-//  
+//
 //
 //  Created by Wellington Soares on 23/03/21.
 //
@@ -14,7 +14,7 @@ public struct BlocViewBuilder<Event:Equatable, BlocState:Equatable, Content: Vie
     private let builder: (BlocState) -> Content
 
     public var body: some View {
-        return builder(self.state).onReceive(bloc.$state, perform: {
+        return builder(self.state).onReceive(bloc, perform: {
             state in
             self.state = state })
     }
@@ -24,7 +24,7 @@ public struct BlocViewBuilder<Event:Equatable, BlocState:Equatable, Content: Vie
     ) {
         self.bloc = bloc
         self.builder = builder
-        _state = State(initialValue: bloc.state)
+        _state = State(initialValue: bloc.value)
     }
 
 }

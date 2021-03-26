@@ -28,13 +28,11 @@ let package = Package(
 
 ## Usage example
 
-
 ```swift
 import Project
 let proj = Class(param: String?)
 proj.run()
 ```
-
 
 ## Release History
 
