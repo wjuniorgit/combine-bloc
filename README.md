@@ -1,3 +1,2 @@
-# CombineBLoC 0.1.0
-
-A first draft for a BLoC (Business Logic Component) built with Combine for SwiftUI.
+# Combine Bloc
+> An implementation of the ´BLoC´ Design Pattern (Business Logic Component) with Apple's Combine framework.
