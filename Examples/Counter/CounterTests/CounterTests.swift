@@ -18,25 +18,25 @@ class CounterTests: XCTestCase {
 
     func testIncrement(){
         let counterBloc = CounterBloc()
-        Just(.increment).subscribe(counterBloc)
+        Just(.increment).subscribe(counterBloc.subscriber)
         XCTAssertEqual(counterBloc.value,CounterState(count:1))
-        Just(.increment).subscribe(counterBloc)
+        Just(.increment).subscribe(counterBloc.subscriber)
         XCTAssertEqual(counterBloc.value,CounterState(count:2))
     }
 
     func testIncrementSequence(){
         let counterBloc = CounterBloc()
-        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc)
+        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc.subscriber)
         XCTAssertEqual(counterBloc.value,CounterState(count:4))
-        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc)
+        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc.subscriber)
         XCTAssertEqual(counterBloc.value,CounterState(count:8))
     }
 
     func testDecrementSequence(){
         let counterBloc = CounterBloc()
-        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc)
+        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc.subscriber)
         XCTAssertEqual(counterBloc.value,CounterState(count:-4))
-        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc)
+        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc.subscriber)
         XCTAssertEqual(counterBloc.value,CounterState(count:-8))
     }
 

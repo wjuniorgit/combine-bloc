@@ -14,7 +14,7 @@ public struct BlocViewBuilder<Event:Equatable, BlocState:Equatable, Content: Vie
     private let builder: (BlocState) -> Content
 
     public var body: some View {
-        return builder(self.state).onReceive(bloc, perform: {
+        return builder(self.state).onReceive(bloc.publisher, perform: {
             state in
             self.state = state })
     }

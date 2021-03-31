@@ -14,7 +14,7 @@ public struct BlocListener<Event:Equatable, BlocState:Equatable, Content: View>:
     private let builder: () -> Content
 
     public var body: some View {
-        return builder().onReceive(bloc.transitions, perform: {
+        return builder().onReceive(bloc.transitionSubject, perform: {
             transition in
             action(transition) })
     }

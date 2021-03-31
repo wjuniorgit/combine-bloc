@@ -24,7 +24,7 @@ struct LoginView: View {
                     HStack {
                         Image(systemName: "person")
                         TextField("Username", text: Binding(get: { state.userName }, set: {
-                            Just(.loginUsernameChanged($0)).subscribe(loginBloc)
+                            Just(.loginUsernameChanged($0)).subscribe(loginBloc.subscriber)
                         })
                         ).autocapitalization(.none).disabled(state.loginFormState == .submitting ? true : false)
 
@@ -39,7 +39,7 @@ struct LoginView: View {
                     HStack {
                         Image(systemName: "lock")
                         SecureField("Password", text: Binding(get: { state.password }, set: {
-                            Just(.loginPasswordChanged($0)).subscribe(loginBloc)
+                            Just(.loginPasswordChanged($0)).subscribe(loginBloc.subscriber)
                         })).autocapitalization(.none).disabled(state.loginFormState == .submitting ? true : false)
                     }
                         .padding()
@@ -49,7 +49,7 @@ struct LoginView: View {
                         .padding()
                         .disabled(state.loginFormState == .submitting ? true : false)
                     Button(action: {
-                        Just(.tryLogin).subscribe(loginBloc)
+                        Just(.tryLogin).subscribe(loginBloc.subscriber)
                     }) {
                         HStack {
                             if(state.loginFormState == .submitting) {

@@ -40,6 +40,7 @@ final class StandardAuthRepository: AuthenticationRepository {
 
     func logOut() {
         cancellable = Just(Result.failure(AuthenticationRepositoryError.unauthenticated)).assign(to: \.subject.value, on: self)
+
     }
 
     func logIn(username: String, password: String) {

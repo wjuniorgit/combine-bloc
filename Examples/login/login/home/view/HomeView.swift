@@ -18,7 +18,7 @@ struct HomeView: View {
         VStack {
             Text("Welcome \(user.name)! ")
             Button(action: {
-                Just(.AuthenticationLogoutRequested).subscribe(authenticationBloc)
+                Just(.AuthenticationLogoutRequested).subscribe(authenticationBloc.subscriber)
             }) {
                 Text("LOGOUT")
                     .font(.headline)

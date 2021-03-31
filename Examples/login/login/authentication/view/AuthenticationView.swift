@@ -18,7 +18,7 @@ struct AuthenticationView: View {
 
     func createLoginView(_ authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>) -> LoginView {
         return LoginView(loginBloc: LoginBloc(authenticationState: authenticationBloc.value, onLoginRequested: { username, password in
-            Just(.AuthenticationLoginRequested(username: username, password: password)).subscribe(authenticationBloc)
+            Just(.AuthenticationLoginRequested(username: username, password: password)).subscribe(authenticationBloc.subscriber)
         }))
 
     }

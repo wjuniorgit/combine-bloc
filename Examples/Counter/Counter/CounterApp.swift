@@ -25,12 +25,12 @@ struct ContentView: View {
         VStack {
             Text("Counter App").padding()
             HStack {
-                Button(action: { Just(.decrement).subscribe(counterBloc) }) {
+                Button(action: { Just(.decrement).subscribe(counterBloc.subscriber) }) {
                     Text("-") }.padding()
                 BlocViewBuilder(bloc: counterBloc) {
                     state in
                     Text("\(state.count)") }.padding()
-                Button(action: { Just(.increment).subscribe(counterBloc) }) {
+                Button(action: { Just(.increment).subscribe(counterBloc.subscriber) }) {
                     Text("+") }.padding()
             }
         }.font(.title)

@@ -51,7 +51,7 @@ final class AuthenticationBloc: Bloc<AuthenticationEvent, AuthenticationState> {
             }
         }
         self.cancellable = repository.user.sink { userResult in
-            Just(.AuthenticatedUserChanged(userResult)).subscribe(self)
+            Just(.AuthenticatedUserChanged(userResult)).subscribe(self.subscriber)
         }
 
     }

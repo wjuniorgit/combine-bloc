@@ -21,7 +21,7 @@ import PackageDescription
 
 let package = Package(
     dependencies: [
-        .Package(url: "https://github.com/wjuniorgit/combine-bloc", from: "1.1.0"),
+        .Package(url: "https://github.com/wjuniorgit/combine-bloc", from: "0.1.0"),
     ],
 )
 ```
@@ -36,7 +36,7 @@ proj.run()
 
 ## Release History
 
-* 0.1.1
+* 0.2.0
     * First proper release
 * 0.1.0
     * Work in progress
