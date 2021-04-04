@@ -7,6 +7,7 @@ import Combine
 
 open class Bloc<Event:Equatable, State:Equatable> {
 
+
     public init(initialValue: State, mapEventToState: @escaping (Event, State, @escaping (State) -> ()) -> ()) {
         self.value = initialValue
         self.mapEventToState = mapEventToState

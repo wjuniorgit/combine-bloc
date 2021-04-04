@@ -6,7 +6,7 @@
 //
 
 public struct Transition<Event: Equatable, State: Equatable>: Equatable {
-    let currentState: State
-    let event: Event?
-    let nextState: State
+    public let currentState: State
+    public let event: Event?
+    public let nextState: State
 }
