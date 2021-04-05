@@ -19,8 +19,8 @@ struct TodosApp: App {
 
 
 struct ContentView: View {
-
+    let todosBloc = TodosBloc(repository: MockTodosRepository())
     var body: some View {
-        TodosView(todosBloc: TodosBloc(repository: MockTodosRepository())) }
+        TodosViewRoot(todosBloc: todosBloc) }
 }
 
