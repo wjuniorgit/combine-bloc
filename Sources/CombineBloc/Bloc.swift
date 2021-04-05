@@ -35,7 +35,6 @@ open class Bloc<Event:Equatable, State:Equatable> {
         return self._subscriber!
     }
 
-
     final public func send(_ input: Event) {
         eventSubject.send(input)
     }

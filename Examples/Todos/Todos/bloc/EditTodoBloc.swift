@@ -47,38 +47,23 @@ struct ValidTodoState: Equatable {
 }
 
 
-
 final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
 
     private var cancellable: AnyCancellable?
-    private let todosBloc: Bloc<TodosEvent, TodosState>
-    private var id: UUID
+    private var todo: Todo?
+    private let todosState: AnyPublisher<TodosState, Never>
+
 
     private static func isNameValid(_ name: String) -> Bool {
         return NSPredicate(format: "SELF MATCHES %@", ".{1,}").evaluate(with: name)
     }
 
-    private static func todoFromState(id: UUID?, todosState: TodosState) -> Todo? {
-        var optionalTodo: Todo?
-        if case let TodosState.Loaded(todos) = todosState {
-            let todoInList: Todo? = todos.first { todo -> Bool in
-                todo.id == id
-            }
-            optionalTodo = todoInList
-        }
-        return optionalTodo
-    }
-
-    init(id: UUID = UUID(), todosBloc: Bloc<TodosEvent, TodosState>) {
-        self.todosBloc = todosBloc
-        self.id = id
-
-        let optionalTodo: Todo? = EditTodoBloc.todoFromState(id: id, todosState: todosBloc.value)
-        let isSaved: Bool = optionalTodo != nil ? true : false
-
-        let initialValue = EditTodoState.ValidTodo(ValidTodoState(name: optionalTodo?.name ?? "",
-                                                                  isDone: optionalTodo?.isDone ?? false,
-                                                                  id: id, isSaved: isSaved, canSave: false, isNameValid: true))
+    init(todo: Todo? = nil, todosState: AnyPublisher<TodosState, Never>, add: @escaping (Todo) -> Void, update: @escaping (Todo) -> Void, remove: @escaping (UUID) -> Void) {
+        self.todo = todo
+        self.todosState = todosState
+        let initialValue = EditTodoState.ValidTodo(ValidTodoState(name: todo?.name ?? "",
+                                                                  isDone: todo?.isDone ?? false,
+                                                                  id: todo?.id ?? UUID(), isSaved: todo != nil ? true : false, canSave: false, isNameValid: true))
 
         super.init(initialValue: initialValue)
         { event, state, emit in
@@ -96,31 +81,39 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
                 case .success(let todo):
                     emit(.ValidTodo(ValidTodoState(name: todo.name, isDone: todo.isDone, id: todo.id, isSaved: true, canSave: false, isNameValid: true)))
                 case.failure(_):
-                 emit(.RemovedTodo)
+                    emit(.RemovedTodo)
                 }
             case .SaveTodo:
                 if case let EditTodoState.ValidTodo(state) = state {
                     if state.isSaved {
-                        todosBloc.send(.Update(Todo(id: state.id, name: state.name, isDone: state.isDone)))
+                        update(Todo(id: state.id, name: state.name, isDone: state.isDone))
                     } else {
-                        todosBloc.send(.Add(Todo(id: state.id, name: state.name, isDone: state.isDone)))
+                        add(Todo(id: state.id, name: state.name, isDone: state.isDone))
                     }
                 }
             case .RemoveTodo:
                 if case let EditTodoState.ValidTodo(state) = state, state.isSaved {
-                    todosBloc.send(.Remove(state.id))
+                    remove(state.id)
                 }
             }
         }
 
+        cancellable = todosState.sink { newTodosState in
 
-        cancellable = todosBloc.publisher.sink { todosState in
-            let optionalTodo = EditTodoBloc.todoFromState(id: self.id, todosState: todosState)
-            if let todo = optionalTodo {
-                Just(.TodoUpdated(Result.success(todo))).subscribe(self.subscriber)
-            } else {
-                if case let EditTodoState.ValidTodo(state) = self.value, state.isSaved {
-                    Just(.TodoUpdated(Result.failure(TodoRemoved()))).subscribe(self.subscriber)
+            if case let .ValidTodo(editTodoState) = self.value {
+
+                if case let .Loaded(newTodos) = newTodosState {
+                    let optionalTodo: Todo? = newTodos.first { todo -> Bool in
+                        todo.id == editTodoState.id
+                    }
+
+                    if let todo = optionalTodo {
+                        Just(.TodoUpdated(Result.success(todo))).subscribe(self.subscriber)
+                    } else {
+                        if editTodoState.isSaved {
+                            Just(.TodoUpdated(Result.failure(TodoRemoved()))).subscribe(self.subscriber)
+                        }
+                    }
                 }
             }
         }
@@ -130,5 +123,4 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
         cancellable?.cancel()
         super.cancel()
     }
-
 }

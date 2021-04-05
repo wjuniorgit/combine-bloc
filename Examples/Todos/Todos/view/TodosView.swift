@@ -9,16 +9,31 @@ import SwiftUI
 import Combine
 import CombineBloc
 
+typealias AddTodoNavigationLink = (_ isActive: Binding<Bool>, _ label: () -> Button<Text>) -> NavigationLink<Button<Text>, TodoDetails>
+typealias EditTodoNavigationLink = (_ todo: Todo) -> NavigationLink<EmptyView, TodoDetails>
+
 struct TodosView: View {
     let todosBloc: Bloc<TodosEvent, TodosState>
     let sortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState>
     let filteredTodosBloc: Bloc<FilteredTodosEvent, FilteredTodosState>
+    let addTodoNavigation: AddTodoNavigationLink
+    let editTodoNavigation: EditTodoNavigationLink
 
 
     init(todosBloc: Bloc<TodosEvent, TodosState>) {
         self.todosBloc = todosBloc
         self.sortedTodosBloc = SortedTodosBloc(todosBloc: todosBloc)
         self.filteredTodosBloc = FilteredTodosBloc(sortedTodosBloc: sortedTodosBloc)
+        self.editTodoNavigation = { todo in
+            NavigationLink(
+                destination: TodoDetails(todo: todo, todosState: todosBloc.publisher, add: { todosBloc.send(.Add($0)) }, update: { todosBloc.send(.Update($0)) }, remove: { todosBloc.send(.Remove($0)) })) {
+                EmptyView()
+            }
+        }
+        self.addTodoNavigation = { isActive, label in
+            NavigationLink(
+                destination: TodoDetails(todosState: todosBloc.publisher, add: { todosBloc.send(.Add($0)) }, update: { todosBloc.send(.Update($0)) }, remove: { todosBloc.send(.Remove($0)) }), isActive: isActive, label: label)
+        }
     }
 
     var body: some View {
@@ -30,11 +45,13 @@ struct TodosView: View {
                     case .Loading:
                         ProgressView()
                     case .Loaded(let todos):
-                        TodosListView(todosBloc: todosBloc,
-                                      todos: todos,
-                                      updateTodo: { todosBloc.send(.Update($0)) },
+                        TodosListView(todos: todos,
+                                      update: { todosBloc.send(.Update($0)) },
                                       sort: { sortedTodosBloc.send(.UpdateSortRule($0)) },
-                                      filter: { filteredTodosBloc.send(.UpdateFilterRule($0)) })
+                                      filter: { filteredTodosBloc.send(.UpdateFilterRule($0)) },
+                                      addTodoNavigation: addTodoNavigation,
+                                      editTodoNavigation: editTodoNavigation
+                        )
                     case .Error:
                         Text("Error")
                     }
@@ -47,16 +64,18 @@ struct TodosView: View {
 
 struct TodosListView: View {
     let todos: [Todo]
-    let updateTodo: (Todo) -> ()
+    let update: (Todo) -> ()
     let sort: (TodosSortRule) -> ()
     let filter: (TodosFilterRule) -> ()
-    let todosBloc: Bloc<TodosEvent, TodosState>
+    let addTodoNavigation: AddTodoNavigationLink
+    let editTodoNavigation: EditTodoNavigationLink
     @State private var isShowingAddTodoView = false
 
-    init(todosBloc: Bloc<TodosEvent, TodosState>, todos: [Todo], updateTodo: @escaping (Todo) -> (), sort: @escaping(TodosSortRule) -> (), filter: @escaping(TodosFilterRule) -> ()) {
-        self.todosBloc = todosBloc
+    init(todos: [Todo], update: @escaping (Todo) -> (), sort: @escaping(TodosSortRule) -> (), filter: @escaping(TodosFilterRule) -> (), addTodoNavigation: @escaping AddTodoNavigationLink, editTodoNavigation: @escaping EditTodoNavigationLink) {
+        self.addTodoNavigation = addTodoNavigation
+        self.editTodoNavigation = editTodoNavigation
         self.todos = todos
-        self.updateTodo = updateTodo
+        self.update = update
         self.sort = sort
         self.filter = filter
     }
@@ -64,9 +83,10 @@ struct TodosListView: View {
     var body: some View {
         VStack {
             List(todos) { todo in
-                TodosItemView(name: todo.name, isDone: todo.isDone,
-                              buttonAction: { updateTodo(todo.copyWith(isDone: !todo.isDone)) },
-                              todoDetails: TodoDetails(id: todo.id, todosBloc: todosBloc))
+                TodosItemView(todo: todo,
+                              buttonAction: { update(todo.copyWith(isDone: !todo.isDone)) },
+                              editTodoNavigation: editTodoNavigation
+                )
             }.listStyle(GroupedListStyle())
             Spacer()
             HStack { Menu("Sort") {
@@ -80,53 +100,54 @@ struct TodosListView: View {
                     Button("Undone", action: { filter(.undone) })
                 }.padding()
                 Spacer()
-                NavigationLink(
-                    destination: TodoDetails(todosBloc: todosBloc), isActive: $isShowingAddTodoView) {
-                    Button("Add", action: { isShowingAddTodoView = true }).padding() }
+                addTodoNavigation($isShowingAddTodoView) {
+                    Button("Add", action: { isShowingAddTodoView = true })
+                }.padding()
             }
         }
-
     }
 }
 
 struct TodosItemView: View {
-
-    let isDone: Bool
-    let name: String
+    let todo: Todo
     let buttonAction: () -> ()
-    let todoDetails: TodoDetails
-    //@State private var isShowingTodoDetailsView = false
+    let editTodoNavigation: EditTodoNavigationLink
 
-    init(name: String, isDone: Bool, buttonAction: @escaping () -> (), todoDetails: TodoDetails) {
-        self.name = name
-        self.isDone = isDone
+    init(todo: Todo, buttonAction: @escaping () -> (),
+         editTodoNavigation: @escaping EditTodoNavigationLink) {
+        self.editTodoNavigation = editTodoNavigation
+        self.todo = todo
         self.buttonAction = buttonAction
-        self.todoDetails = todoDetails
     }
 
     var body: some View {
         HStack {
             Button(action: { buttonAction() }) {
-                Image(systemName: isDone ? "checkmark.square" : "square") }
-            Text(name)
+                Image(systemName: todo.isDone ? "checkmark.square" : "square") }
+            Text(todo.name)
             Spacer()
-            NavigationLink(
-                destination: todoDetails)
-            { EmptyView() }
+            editTodoNavigation(todo)
         }.padding().buttonStyle(PlainButtonStyle())
     }
 }
 
 struct TodoDetails: View {
-    let todosBloc: Bloc<TodosEvent, TodosState>
-    let id: UUID?
+    let todo: Todo?
+    let todosState: AnyPublisher<TodosState, Never>
     @State var editTodoBloc: Bloc<EditTodoEvent, EditTodoState>
     @Environment(\.presentationMode) var presentation
+    let add: (Todo) -> Void
+    let update: (Todo) -> Void
+    let remove: (UUID) -> Void
 
-    init(id: UUID? = nil, todosBloc: Bloc<TodosEvent, TodosState>) {
-        self.id = id
-        self.todosBloc = todosBloc
-        _editTodoBloc = State(initialValue: EditTodoBloc(id: id ?? UUID(), todosBloc: self.todosBloc))
+    init(todo: Todo? = nil, todosState: AnyPublisher<TodosState, Never>,
+         add: @escaping (Todo) -> Void, update: @escaping (Todo) -> Void, remove: @escaping (UUID) -> Void) {
+        self.todo = todo
+        self.todosState = todosState
+        self.add = add
+        self.update = update
+        self.remove = remove
+        _editTodoBloc = State(initialValue: EditTodoBloc(todo: todo, todosState: todosState, add: add, update: update, remove: remove))
         self.editTodoBloc.cancel()
 
     }
@@ -174,61 +195,14 @@ struct TodoDetails: View {
 
                             }
                         }.padding().navigationBarTitle(state.isSaved ? "Edit Todo" : "New Todo")
-
                     case .RemovedTodo:
                         ProgressView()
                     }
                 }.onAppear {
-                    print("onAppear")
-                    editTodoBloc = EditTodoBloc(id: id ?? UUID(), todosBloc: self.todosBloc)
+                    editTodoBloc = EditTodoBloc(todo: todo, todosState: self.todosState, add: add, update: update, remove: remove)
                 }.onDisappear {
-                    print("onDisappear")
                     self.editTodoBloc.cancel()
                 }
-
-            }
-        }
-    }
-
-}
-
-struct TodosDetailsBody: View {
-    let name: String
-    let isDone: Bool
-    let textFieldUpdate: (String) -> ()
-
-    var body: some View {
-        VStack(alignment: .center) {
-            Text("Placeholder")
-            TextField("Todo", text: Binding(get: { name }, set: { textFieldUpdate($0) }))
-            Image(systemName: isDone ? "checkmark.square" : "square")
-
-        }.padding()
-
-    }
-
-}
-
-struct ItemsToolbar: ToolbarContent {
-    let add: () -> Void
-    let sort: (TodosSortRule) -> Void
-    let filter: (TodosFilterRule) -> Void
-
-    var body: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button("Add", action: add)
-        }
-
-        ToolbarItemGroup(placement: .bottomBar) {
-            Menu("Sort") {
-                Button("by Done", action: { sort(.done) })
-                Button("by Id", action: { sort(.id) })
-                Button("by Name", action: { sort(.name) })
-            }
-            Menu("Filter") {
-                Button("None", action: { filter(.none) })
-                Button("Done", action: { filter(.done) })
-                Button("Undone", action: { filter(.undone) })
             }
         }
     }

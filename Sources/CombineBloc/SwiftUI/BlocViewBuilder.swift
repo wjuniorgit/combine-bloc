@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+
 public struct BlocViewBuilder<Event:Equatable, BlocState:Equatable, Content: View>: View {
 
     var publisher: AnyPublisher<BlocState, Never>
