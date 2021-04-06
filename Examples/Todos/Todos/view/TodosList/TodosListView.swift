@@ -34,7 +34,7 @@ struct TodosListView: View {
                 Menu("Filter") {
                     Button("None", action: { filter(.none) })
                     Button("Done", action: { filter(.done) })
-                    Button("Undone", action: { filter(.undone) })
+                    Button("Undone", action: { filter(.notDone) })
                 }.padding()
                 Spacer()
                 addTodoNavigation($isShowingAddTodoView) {

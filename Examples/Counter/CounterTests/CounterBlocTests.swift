@@ -9,7 +9,7 @@ import CombineBloc
 import XCTest
 @testable import Counter
 
-class CounterTests: XCTestCase {
+class CounterBlocTests: XCTestCase {
 
     func testInitialState(){
         let counterBloc = CounterBloc()

@@ -11,7 +11,7 @@
 		55AD842F260A9C6800456D92 /* CombineBloc in Frameworks */ = {isa = PBXBuildFile; productRef = 55AD842E260A9C6800456D92 /* CombineBloc */; };
 		55DECF2E260A933700F29993 /* CounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DECF2D260A933700F29993 /* CounterApp.swift */; };
 		55DECF32260A933A00F29993 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55DECF31260A933A00F29993 /* Assets.xcassets */; };
-		55DECF40260A933B00F29993 /* CounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DECF3F260A933B00F29993 /* CounterTests.swift */; };
+		55DECF40260A933B00F29993 /* CounterBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DECF3F260A933B00F29993 /* CounterBlocTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +31,7 @@
 		55DECF31260A933A00F29993 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		55DECF36260A933A00F29993 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55DECF3B260A933B00F29993 /* CounterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CounterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		55DECF3F260A933B00F29993 /* CounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterTests.swift; sourceTree = "<group>"; };
+		55DECF3F260A933B00F29993 /* CounterBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterBlocTests.swift; sourceTree = "<group>"; };
 		55DECF41260A933B00F29993 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,7 +94,7 @@
 		55DECF3E260A933B00F29993 /* CounterTests */ = {
 			isa = PBXGroup;
 			children = (
-				55DECF3F260A933B00F29993 /* CounterTests.swift */,
+				55DECF3F260A933B00F29993 /* CounterBlocTests.swift */,
 				55DECF41260A933B00F29993 /* Info.plist */,
 			);
 			path = CounterTests;
@@ -210,7 +210,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55DECF40260A933B00F29993 /* CounterTests.swift in Sources */,
+				55DECF40260A933B00F29993 /* CounterBlocTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

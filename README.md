@@ -26,21 +26,6 @@ let package = Package(
 )
 ```
 
-## Usage example
-
-```swift
-import Project
-let proj = Class(param: String?)
-proj.run()
-```
-
-## Release History
-
-* 0.2.0
-    * First proper release
-* 0.1.0
-    * Work in progress
-
 ## Meta
 
 Wellington Soares

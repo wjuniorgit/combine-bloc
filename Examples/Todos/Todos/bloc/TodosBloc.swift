@@ -33,7 +33,7 @@ final class TodosBloc: Bloc<TodosEvent, TodosState> {
 
 
 
-    init(repository: TodosRepository = MockTodosRepository()) {
+    init(repository: TodosRepository) {
         self.repository = repository
 
         super.init(initialValue: TodosState.Loading, mapEventToState:  { event, _, emit in

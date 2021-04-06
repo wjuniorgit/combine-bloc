@@ -11,7 +11,7 @@
 		5571C6952616079500D3C721 /* FilteredTodosBloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571C6942616079500D3C721 /* FilteredTodosBloc.swift */; };
 		55C44C0B2614A2A500B17306 /* TodosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C44C0A2614A2A500B17306 /* TodosApp.swift */; };
 		55C44C0F2614A2AD00B17306 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55C44C0E2614A2AD00B17306 /* Assets.xcassets */; };
-		55C44C1D2614A2AD00B17306 /* TodosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C44C1C2614A2AD00B17306 /* TodosTests.swift */; };
+		55C44C1D2614A2AD00B17306 /* TodosBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C44C1C2614A2AD00B17306 /* TodosBlocTests.swift */; };
 		55C44C462614A34000B17306 /* CombineBloc in Frameworks */ = {isa = PBXBuildFile; productRef = 55C44C452614A34000B17306 /* CombineBloc */; };
 		55C44C492614A38500B17306 /* TodosRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C44C482614A38500B17306 /* TodosRepository.swift */; };
 		55C44C4E2614B25C00B17306 /* TodosBloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C44C4D2614B25C00B17306 /* TodosBloc.swift */; };
@@ -20,6 +20,9 @@
 		55EB5DFE261BAD2200EBD564 /* TodoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB5DFD261BAD2200EBD564 /* TodoItemView.swift */; };
 		55EB5E02261BAD4D00EBD564 /* TodoDetailsRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB5E01261BAD4D00EBD564 /* TodoDetailsRoot.swift */; };
 		55EB5E08261BADDE00EBD564 /* TodoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB5E07261BADDE00EBD564 /* TodoDetailsView.swift */; };
+		55EB5E19261BD12B00EBD564 /* SortedTodosBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB5E18261BD12B00EBD564 /* SortedTodosBlocTests.swift */; };
+		55EB5E1D261BD86D00EBD564 /* FilteredTodosBlocTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB5E1C261BD86D00EBD564 /* FilteredTodosBlocTest.swift */; };
+		55EB5E21261BDADB00EBD564 /* EditTodoBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB5E20261BDADB00EBD564 /* EditTodoBlocTests.swift */; };
 		55ED7D802614EB5900BFF116 /* SortedTodosBloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED7D7F2614EB5900BFF116 /* SortedTodosBloc.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +44,7 @@
 		55C44C0E2614A2AD00B17306 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		55C44C132614A2AD00B17306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55C44C182614A2AD00B17306 /* TodosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		55C44C1C2614A2AD00B17306 /* TodosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosTests.swift; sourceTree = "<group>"; };
+		55C44C1C2614A2AD00B17306 /* TodosBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosBlocTests.swift; sourceTree = "<group>"; };
 		55C44C1E2614A2AD00B17306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55C44C482614A38500B17306 /* TodosRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosRepository.swift; sourceTree = "<group>"; };
 		55C44C4D2614B25C00B17306 /* TodosBloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosBloc.swift; sourceTree = "<group>"; };
@@ -50,6 +53,9 @@
 		55EB5DFD261BAD2200EBD564 /* TodoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemView.swift; sourceTree = "<group>"; };
 		55EB5E01261BAD4D00EBD564 /* TodoDetailsRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailsRoot.swift; sourceTree = "<group>"; };
 		55EB5E07261BADDE00EBD564 /* TodoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailsView.swift; sourceTree = "<group>"; };
+		55EB5E18261BD12B00EBD564 /* SortedTodosBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedTodosBlocTests.swift; sourceTree = "<group>"; };
+		55EB5E1C261BD86D00EBD564 /* FilteredTodosBlocTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredTodosBlocTest.swift; sourceTree = "<group>"; };
+		55EB5E20261BDADB00EBD564 /* EditTodoBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTodoBlocTests.swift; sourceTree = "<group>"; };
 		55ED7D7F2614EB5900BFF116 /* SortedTodosBloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedTodosBloc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,7 +113,7 @@
 		55C44C1B2614A2AD00B17306 /* TodosTests */ = {
 			isa = PBXGroup;
 			children = (
-				55C44C1C2614A2AD00B17306 /* TodosTests.swift */,
+				55EB5E11261BCE3700EBD564 /* bloc */,
 				55C44C1E2614A2AD00B17306 /* Info.plist */,
 			);
 			path = TodosTests;
@@ -165,6 +171,17 @@
 				55EB5E07261BADDE00EBD564 /* TodoDetailsView.swift */,
 			);
 			path = TodoDetails;
+			sourceTree = "<group>";
+		};
+		55EB5E11261BCE3700EBD564 /* bloc */ = {
+			isa = PBXGroup;
+			children = (
+				55C44C1C2614A2AD00B17306 /* TodosBlocTests.swift */,
+				55EB5E18261BD12B00EBD564 /* SortedTodosBlocTests.swift */,
+				55EB5E1C261BD86D00EBD564 /* FilteredTodosBlocTest.swift */,
+				55EB5E20261BDADB00EBD564 /* EditTodoBlocTests.swift */,
+			);
+			path = bloc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,7 +303,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55C44C1D2614A2AD00B17306 /* TodosTests.swift in Sources */,
+				55EB5E1D261BD86D00EBD564 /* FilteredTodosBlocTest.swift in Sources */,
+				55EB5E21261BDADB00EBD564 /* EditTodoBlocTests.swift in Sources */,
+				55EB5E19261BD12B00EBD564 /* SortedTodosBlocTests.swift in Sources */,
+				55C44C1D2614A2AD00B17306 /* TodosBlocTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

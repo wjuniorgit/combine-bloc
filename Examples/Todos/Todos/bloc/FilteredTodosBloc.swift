@@ -13,7 +13,7 @@ import CombineBloc
 enum TodosFilterRule {
     case none
     case done
-    case undone
+    case notDone
 }
 
 
@@ -43,7 +43,7 @@ final class FilteredTodosBloc: Bloc<FilteredTodosEvent, FilteredTodosState> {
             return todos
         case .done:
             return Array(todos).filter { $0.isDone }
-        case .undone:
+        case .notDone:
             return Array(todos).filter { !$0.isDone }
         }
     }
@@ -64,8 +64,8 @@ final class FilteredTodosBloc: Bloc<FilteredTodosEvent, FilteredTodosState> {
                     currentFilterRule = .none
                 case .done:
                     currentFilterRule = .done
-                case .undone:
-                    currentFilterRule = .undone
+                case .notDone:
+                    currentFilterRule = .notDone
                 }
 
             case .TodosStateUpdated(let todoState):

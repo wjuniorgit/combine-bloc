@@ -36,21 +36,24 @@ protocol TodosRepository {
 
 final class MockTodosRepository: TodosRepository {
 
+
+
     private var savedTodos: Set<Todo> {
         didSet {
             cancellable = Just(Result.success(savedTodos)).assign(to: \.subject.value, on: self)
         }
     }
 
-    private func loadTodos() {
-        cancellable = Just(Result.success(savedTodos)).delay(for: 2, scheduler: RunLoop.main).assign(to: \.subject.value, on: self)
+    private func loadTodos(delay: Int, mustFail: Bool) {
+        if mustFail {
+            cancellable = Just(Result.failure(.connectionError)).delay(for: .init(integerLiteral: TimeInterval(delay)), scheduler: RunLoop.main).assign(to: \.subject.value, on: self)
+        } else { cancellable = Just(Result.success(savedTodos)).delay(for: .init(integerLiteral: TimeInterval(delay)), scheduler: RunLoop.main).assign(to: \.subject.value, on: self)
+        }
     }
 
-    init() {
-        savedTodos = [Todo(id: UUID(), name: "homework", isDone: false),
-                      Todo(id: UUID(), name: "chores", isDone: false),
-                      Todo(id: UUID(), name: "breakfast", isDone: true)]
-        loadTodos()
+    init(savedTodos: Set<Todo>, delay: Int = 2, mustFail: Bool = false) {
+        self.savedTodos = savedTodos
+        loadTodos(delay: delay, mustFail: mustFail)
     }
 
     var todos: AnyPublisher<Result<Set<Todo>, TodosRepositoryError>, Never> {
@@ -69,8 +72,8 @@ final class MockTodosRepository: TodosRepository {
         if let index = savedTodos.firstIndex(where: { $0.id == id }) {
             savedTodos.remove(at: index)
         }
-
     }
+
     func update(_ todo: Todo) {
         self.remove(todo.id)
         self.add(todo)
