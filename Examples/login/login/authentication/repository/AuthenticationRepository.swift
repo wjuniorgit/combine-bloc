@@ -29,7 +29,7 @@ protocol AuthenticationRepository {
     var user: AnyPublisher<Result<User, AuthenticationRepositoryError>, Never> { get }
 }
 
-final class StandardAuthRepository: AuthenticationRepository {
+final class MockAuthRepository: AuthenticationRepository {
 
     var user: AnyPublisher<Result<User, AuthenticationRepositoryError>, Never> {
         subject.eraseToAnyPublisher()

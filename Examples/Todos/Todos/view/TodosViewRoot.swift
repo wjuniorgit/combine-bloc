@@ -19,7 +19,6 @@ struct TodosViewRoot: View {
     let addTodoNavigation: AddTodoNavigationLink
     let editTodoNavigation: EditTodoNavigationLink
 
-
     init(todosBloc: Bloc<TodosEvent, TodosState>) {
         self.todosBloc = todosBloc
         self.sortedTodosBloc = SortedTodosBloc(todosBloc: todosBloc)

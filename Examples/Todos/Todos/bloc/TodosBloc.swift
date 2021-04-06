@@ -36,7 +36,8 @@ final class TodosBloc: Bloc<TodosEvent, TodosState> {
     init(repository: TodosRepository) {
         self.repository = repository
 
-        super.init(initialValue: TodosState.Loading, mapEventToState:  { event, _, emit in
+        super.init(initialValue: TodosState.Loading, mapEventToState:  {
+            event, _, emit in
             switch event {
             case .ListUpdated(let result):
                 switch result {

@@ -33,7 +33,6 @@ final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
     private let todosBloc: Bloc<TodosEvent, TodosState>
 
 
-
     static private func sort(_ todos: [Todo], _ rule: TodosSortRule) -> [Todo]
     {
         switch rule {
@@ -57,24 +56,16 @@ final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
 
             switch event {
             case .UpdateSortRule(let sortRule):
-                switch sortRule {
-                case .id:
-                    currentSortRule = TodosSortRule.id
-                case .name:
-                    currentSortRule = TodosSortRule.name
-                case .done:
-                    currentSortRule = TodosSortRule.done
-                }
+                currentSortRule = sortRule
             case .TodosStateUpdated(let todoState):
                 switch todoState {
-                case .Error:
-                    emit(SortedTodosState(todosState: .Error, sortRule: state.sortRule))
-                case .Loading:
-                    emit(SortedTodosState(todosState: .Loading, sortRule: state.sortRule))
+                case .Error, .Loading:
+                    emit(SortedTodosState(todosState: todoState, sortRule: state.sortRule))
                 case .Loaded(let todos):
                     emit(SortedTodosState(todosState: .Loaded(SortedTodosBloc.sort(todos, currentSortRule)), sortRule: state.sortRule))
                 }
             }
+
             if currentSortRule != state.sortRule {
                 if case let TodosState.Loaded(todos) = state.todosState {
                     emit(SortedTodosState(todosState: .Loaded(SortedTodosBloc.sort(todos, currentSortRule)), sortRule: currentSortRule))

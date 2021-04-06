@@ -59,25 +59,17 @@ final class FilteredTodosBloc: Bloc<FilteredTodosEvent, FilteredTodosState> {
 
             switch event {
             case .UpdateFilterRule(let filterRule):
-                switch filterRule {
-                case .none:
-                    currentFilterRule = .none
-                case .done:
-                    currentFilterRule = .done
-                case .notDone:
-                    currentFilterRule = .notDone
-                }
+                currentFilterRule = filterRule
 
             case .TodosStateUpdated(let todoState):
                 switch todoState {
-                case .Error:
-                    emit(FilteredTodosState(todosState: .Error, filterRule: state.filterRule))
-                case .Loading:
-                    emit(FilteredTodosState(todosState: .Loading, filterRule: state.filterRule))
+                case .Error, .Loading:
+                    emit(FilteredTodosState(todosState: todoState, filterRule: state.filterRule))
                 case .Loaded(let todos):
                     emit(FilteredTodosState(todosState: .Loaded(FilteredTodosBloc.filter(todos, currentFilterRule)), filterRule: state.filterRule))
                 }
             }
+            
             if currentFilterRule != state.filterRule {
                 if case let TodosState.Loaded(todos) = sortedTodosBloc.value.todosState {
                     emit(FilteredTodosState(todosState: .Loaded(FilteredTodosBloc.filter(todos, currentFilterRule)), filterRule: currentFilterRule))
@@ -85,9 +77,6 @@ final class FilteredTodosBloc: Bloc<FilteredTodosEvent, FilteredTodosState> {
                     emit(FilteredTodosState(todosState: state.todosState, filterRule: currentFilterRule))
                 }
             }
-
-
-
 
         }
 

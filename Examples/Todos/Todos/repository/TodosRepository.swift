@@ -20,12 +20,10 @@ struct Todo: Equatable, Identifiable, Hashable {
     }
 }
 
-
 enum TodosRepositoryError: Error, Equatable {
     case connectionError
     case loading
 }
-
 
 protocol TodosRepository {
     func add(_ todo: Todo)
@@ -35,8 +33,6 @@ protocol TodosRepository {
 }
 
 final class MockTodosRepository: TodosRepository {
-
-
 
     private var savedTodos: Set<Todo> {
         didSet {
