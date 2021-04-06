@@ -35,7 +35,7 @@ Distributed under the BSD license. See ``LICENSE`` for more information.
 
 [https://github.com/yourname/github-link](https://github.com/dbader/)
 
-[swift-image]:https://img.shields.io/badge/swift-5.2-orange.svg
+[swift-image]:https://img.shields.io/badge/swift-5.3-orange.svg
 [swift-url]: https://swift.org/
 [license-image]: https://img.shields.io/badge/License-BSD-blue.svg
 [license-url]: LICENSE
