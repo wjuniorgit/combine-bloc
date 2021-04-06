@@ -64,6 +64,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5505BB76261BF93300F3094E /* authentication */ = {
+			isa = PBXGroup;
+			children = (
+				5505BB77261BF93D00F3094E /* bloc */,
+			);
+			path = authentication;
+			sourceTree = "<group>";
+		};
+		5505BB77261BF93D00F3094E /* bloc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = bloc;
+			sourceTree = "<group>";
+		};
+		5505BB78261BF94400F3094E /* login */ = {
+			isa = PBXGroup;
+			children = (
+				5505BB79261BF94A00F3094E /* bloc */,
+			);
+			path = login;
+			sourceTree = "<group>";
+		};
+		5505BB79261BF94A00F3094E /* bloc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = bloc;
+			sourceTree = "<group>";
+		};
 		551BBBFD260E80CB00513B1B = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +129,8 @@
 		551BBC1A260E80D100513B1B /* LoginTests */ = {
 			isa = PBXGroup;
 			children = (
+				5505BB78261BF94400F3094E /* login */,
+				5505BB76261BF93300F3094E /* authentication */,
 				551BBC1B260E80D100513B1B /* LoginTests.swift */,
 				551BBC1D260E80D100513B1B /* Info.plist */,
 			);

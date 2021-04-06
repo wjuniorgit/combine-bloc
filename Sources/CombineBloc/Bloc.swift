@@ -7,7 +7,6 @@ import Combine
 
 open class Bloc<Event:Equatable, State:Equatable> {
 
-
     public init(initialValue: State, mapEventToState: @escaping (Event, State, @escaping (State) -> ()) -> ()) {
         self.value = initialValue
         self.mapEventToState = mapEventToState
@@ -64,6 +63,12 @@ open class Bloc<Event:Equatable, State:Equatable> {
         bag.removeAll()
         self._subscriber = nil
     }
+}
+
+public struct Transition<Event: Equatable, State: Equatable>: Equatable {
+    public let currentState: State
+    public let event: Event?
+    public let nextState: State
 }
 
 public class BlocSubscriber<Input>: Subscriber
