@@ -5,10 +5,9 @@
 //  Created by Wellington Soares on 26/03/21.
 //
 
-import Foundation
 import Combine
 import CombineBloc
-
+import Foundation
 
 enum AuthenticationEvent: Equatable {
     case AuthenticatedUserChanged(Result<User, AuthenticationRepositoryError>)
@@ -23,42 +22,37 @@ enum AuthenticationState: Equatable {
     case authenticating(_ username: String, _ password: String)
 }
 
-
 final class AuthenticationBloc: Bloc<AuthenticationEvent, AuthenticationState> {
-
     private var cancellable: AnyCancellable?
     private let repository: AuthenticationRepository
 
     init(repository: AuthenticationRepository = MockAuthRepository()) {
         self.repository = repository
 
-        super.init(initialValue: AuthenticationState.unknown)
-        { event, _, emit in
+        super.init(initialValue: AuthenticationState.unknown) { event, _, emit in
             switch event {
-            case .AuthenticatedUserChanged(let userResult):
+            case let .AuthenticatedUserChanged(userResult):
                 switch userResult {
-                case .success(let user):
+                case let .success(user):
                     emit(AuthenticationState.authenticated(user))
-                case .failure(let error):
+                case let .failure(error):
                     emit(AuthenticationState.unauthenticated(error))
                 }
             case .AuthenticationLogoutRequested:
                 repository.logOut()
 
-            case .AuthenticationLoginRequested(let username, let password):
+            case let .AuthenticationLoginRequested(username, password):
                 emit(AuthenticationState.authenticating(username, password))
                 repository.logIn(username: username, password: password)
             }
         }
-        self.cancellable = repository.user.sink { userResult in
+        cancellable = repository.user.sink { userResult in
             Just(.AuthenticatedUserChanged(userResult)).subscribe(self.subscriber)
         }
-
     }
 
     override func cancel() {
         cancellable?.cancel()
         super.cancel()
     }
-
 }

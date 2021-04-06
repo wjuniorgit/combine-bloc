@@ -5,9 +5,9 @@
 //  Created by Wellington Soares on 08/03/21.
 //
 
-import SwiftUI
 import Combine
 import CombineBloc
+import SwiftUI
 
 struct AuthenticationView: View {
     var authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>
@@ -17,15 +17,14 @@ struct AuthenticationView: View {
     }
 
     func createLoginView(_ authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>) -> LoginView {
-        return LoginView(loginBloc: LoginBloc(authenticationState: authenticationBloc.value, onLoginRequested: { username, password in
+        LoginView(loginBloc: LoginBloc(authenticationState: authenticationBloc.value, onLoginRequested: { username, password in
             Just(.AuthenticationLoginRequested(username: username, password: password)).subscribe(authenticationBloc.subscriber)
         }))
-
     }
 
     var body: some View {
         VStack {
-            BlocViewBuilder(bloc: authenticationBloc) {
+            StateViewBuilder(bloc: authenticationBloc) {
                 state in
                 switch state {
                 case .unknown:
@@ -34,11 +33,10 @@ struct AuthenticationView: View {
                     createLoginView(authenticationBloc)
                 case .authenticating:
                     createLoginView(authenticationBloc)
-                case .authenticated(let user):
+                case let .authenticated(user):
                     HomeView(user: user, authenticationBloc: authenticationBloc)
                 }
             }
         }
     }
 }
-

@@ -1,7 +1,7 @@
-//import XCTest
+// import XCTest
 //
-//import CombineBlocTests
+// import CombineBlocTests
 //
-//var tests = [XCTestCaseEntry]()
-//tests += CombineBlocTests.allTests()
-//XCTMain(tests)
+// var tests = [XCTestCaseEntry]()
+// tests += CombineBlocTests.allTests()
+// XCTMain(tests)

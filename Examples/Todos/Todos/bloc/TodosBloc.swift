@@ -5,18 +5,15 @@
 //  Created by Wellington Soares on 31/03/21.
 //
 
-
-import Foundation
 import Combine
 import CombineBloc
-
+import Foundation
 
 enum TodosEvent: Equatable {
     case Add(Todo)
     case Remove(UUID)
     case Update(Todo)
     case ListUpdated(Result<Set<Todo>, TodosRepositoryError>)
-
 }
 
 enum TodosState: Equatable {
@@ -25,43 +22,39 @@ enum TodosState: Equatable {
     case Error
 }
 
-
 final class TodosBloc: Bloc<TodosEvent, TodosState> {
-
     private var cancellable: AnyCancellable?
     private let repository: TodosRepository
-
-
 
     init(repository: TodosRepository) {
         self.repository = repository
 
-        super.init(initialValue: TodosState.Loading, mapEventToState:  {
+        super.init(initialValue: TodosState.Loading, mapEventToState: {
             event, _, emit in
             switch event {
-            case .ListUpdated(let result):
+            case let .ListUpdated(result):
                 switch result {
-                case .failure(let error):
+                case let .failure(error):
                     switch error {
                     case .connectionError:
                         emit(.Error)
                     case .loading:
                         emit(.Loading)
                     }
-                case .success(let todos):
+                case let .success(todos):
                     emit(.Loaded(Array(todos)))
                 }
-            case .Add(let todo):
+            case let .Add(todo):
                 repository.add(todo)
-            case .Remove(let id):
+            case let .Remove(id):
                 repository.remove(id)
-            case .Update(let todo):
+            case let .Update(todo):
                 repository.update(todo)
             }
 
         })
 
-        self.cancellable = repository.todos.sink { todosResult in
+        cancellable = repository.todos.sink { todosResult in
             Just(.ListUpdated(todosResult)).subscribe(self.subscriber)
         }
     }
@@ -70,5 +63,4 @@ final class TodosBloc: Bloc<TodosEvent, TodosState> {
         cancellable?.cancel()
         super.cancel()
     }
-
 }

@@ -5,9 +5,9 @@
 //  Created by Wellington Soares on 23/03/21.
 //
 
-import SwiftUI
 import Combine
 import CombineBloc
+import SwiftUI
 
 @main
 struct CounterApp: App {
@@ -26,12 +26,15 @@ struct ContentView: View {
             Text("Counter App").padding()
             HStack {
                 Button(action: { Just(.decrement).subscribe(counterBloc.subscriber) }) {
-                    Text("-") }.padding()
-                BlocViewBuilder(bloc: counterBloc) {
+                    Text("-")
+                }.padding()
+                StateViewBuilder(bloc: counterBloc) {
                     state in
-                    Text("\(state.count)") }.padding()
+                    Text("\(state.count)")
+                }.padding()
                 Button(action: { Just(.increment).subscribe(counterBloc.subscriber) }) {
-                    Text("+") }.padding()
+                    Text("+")
+                }.padding()
             }
         }.font(.title)
     }

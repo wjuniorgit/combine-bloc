@@ -5,9 +5,9 @@
 //  Created by Wellington Soares on 31/03/21.
 //
 
-import Foundation
 import Combine
 import CombineBloc
+import Foundation
 
 enum TodosSortRule {
     case id
@@ -20,21 +20,16 @@ enum SortedTodosEvent: Equatable {
     case TodosStateUpdated(TodosState)
 }
 
-
 struct SortedTodosState: Equatable {
     let todosState: TodosState
     let sortRule: TodosSortRule
 }
 
-
 final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
-
     private var cancellable: AnyCancellable?
     private let todosBloc: Bloc<TodosEvent, TodosState>
 
-
-    static private func sort(_ todos: [Todo], _ rule: TodosSortRule) -> [Todo]
-    {
+    private static func sort(_ todos: [Todo], _ rule: TodosSortRule) -> [Todo] {
         switch rule {
         case .id:
             return todos.sorted { $0.id.uuidString < $1.id.uuidString }
@@ -45,38 +40,36 @@ final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
         }
     }
 
-
     init(todosBloc: Bloc<TodosEvent, TodosState>) {
         self.todosBloc = todosBloc
 
         super.init(initialValue: SortedTodosState(todosState: .Loading, sortRule: .id))
-        { event, state, emit in
+            { event, state, emit in
 
-            var currentSortRule = state.sortRule
+                var currentSortRule = state.sortRule
 
-            switch event {
-            case .UpdateSortRule(let sortRule):
-                currentSortRule = sortRule
-            case .TodosStateUpdated(let todoState):
-                switch todoState {
-                case .Error, .Loading:
-                    emit(SortedTodosState(todosState: todoState, sortRule: state.sortRule))
-                case .Loaded(let todos):
-                    emit(SortedTodosState(todosState: .Loaded(SortedTodosBloc.sort(todos, currentSortRule)), sortRule: state.sortRule))
+                switch event {
+                case let .UpdateSortRule(sortRule):
+                    currentSortRule = sortRule
+                case let .TodosStateUpdated(todoState):
+                    switch todoState {
+                    case .Error, .Loading:
+                        emit(SortedTodosState(todosState: todoState, sortRule: state.sortRule))
+                    case let .Loaded(todos):
+                        emit(SortedTodosState(todosState: .Loaded(SortedTodosBloc.sort(todos, currentSortRule)), sortRule: state.sortRule))
+                    }
+                }
+
+                if currentSortRule != state.sortRule {
+                    if case let TodosState.Loaded(todos) = state.todosState {
+                        emit(SortedTodosState(todosState: .Loaded(SortedTodosBloc.sort(todos, currentSortRule)), sortRule: currentSortRule))
+                    } else {
+                        emit(SortedTodosState(todosState: state.todosState, sortRule: currentSortRule))
+                    }
                 }
             }
 
-            if currentSortRule != state.sortRule {
-                if case let TodosState.Loaded(todos) = state.todosState {
-                    emit(SortedTodosState(todosState: .Loaded(SortedTodosBloc.sort(todos, currentSortRule)), sortRule: currentSortRule))
-                } else {
-                    emit(SortedTodosState(todosState: state.todosState, sortRule: currentSortRule))
-                }
-            }
-
-        }
-
-        self.cancellable = todosBloc.publisher.sink { todosState in
+        cancellable = todosBloc.publisher.sink { todosState in
             Just(.TodosStateUpdated(todosState)).subscribe(self.subscriber)
         }
     }
@@ -85,5 +78,4 @@ final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
         cancellable?.cancel()
         super.cancel()
     }
-
 }

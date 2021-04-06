@@ -9,14 +9,14 @@ import SwiftUI
 
 struct TodoItemView: View {
     let todo: Todo
-    let buttonAction: () -> ()
+    let buttonAction: () -> Void
     let editTodoNavigation: EditTodoNavigationLink
-
 
     var body: some View {
         HStack {
             Button(action: { buttonAction() }) {
-                Image(systemName: todo.isDone ? "checkmark.square" : "square") }
+                Image(systemName: todo.isDone ? "checkmark.square" : "square")
+            }
             Text(todo.name)
             Spacer()
             editTodoNavigation(todo)

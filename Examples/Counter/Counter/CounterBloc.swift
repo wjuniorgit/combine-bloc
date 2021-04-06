@@ -5,8 +5,8 @@
 //  Created by Wellington Soares on 23/03/21.
 //
 
-import Foundation
 import CombineBloc
+import Foundation
 
 enum CounterEvent: Equatable {
     case increment
@@ -18,7 +18,6 @@ struct CounterState: Equatable {
 }
 
 final class CounterBloc: Bloc<CounterEvent, CounterState> {
-
     init() {
         super.init(initialValue: CounterState(count: 0)) {
             event, state, emit in

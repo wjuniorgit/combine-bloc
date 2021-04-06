@@ -6,38 +6,36 @@
 //
 import Combine
 import CombineBloc
-import XCTest
 @testable import Counter
+import XCTest
 
 class CounterBlocTests: XCTestCase {
-
-    func testInitialState(){
+    func testInitialState() {
         let counterBloc = CounterBloc()
-        XCTAssertEqual(counterBloc.value,CounterState(count:0))
+        XCTAssertEqual(counterBloc.value, CounterState(count: 0))
     }
 
-    func testIncrement(){
+    func testIncrement() {
         let counterBloc = CounterBloc()
         Just(.increment).subscribe(counterBloc.subscriber)
-        XCTAssertEqual(counterBloc.value,CounterState(count:1))
+        XCTAssertEqual(counterBloc.value, CounterState(count: 1))
         Just(.increment).subscribe(counterBloc.subscriber)
-        XCTAssertEqual(counterBloc.value,CounterState(count:2))
+        XCTAssertEqual(counterBloc.value, CounterState(count: 2))
     }
 
-    func testIncrementSequence(){
+    func testIncrementSequence() {
         let counterBloc = CounterBloc()
-        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc.subscriber)
-        XCTAssertEqual(counterBloc.value,CounterState(count:4))
-        [.increment,.increment,.increment,.increment].publisher.subscribe(counterBloc.subscriber)
-        XCTAssertEqual(counterBloc.value,CounterState(count:8))
+        [.increment, .increment, .increment, .increment].publisher.subscribe(counterBloc.subscriber)
+        XCTAssertEqual(counterBloc.value, CounterState(count: 4))
+        [.increment, .increment, .increment, .increment].publisher.subscribe(counterBloc.subscriber)
+        XCTAssertEqual(counterBloc.value, CounterState(count: 8))
     }
 
-    func testDecrementSequence(){
+    func testDecrementSequence() {
         let counterBloc = CounterBloc()
-        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc.subscriber)
-        XCTAssertEqual(counterBloc.value,CounterState(count:-4))
-        [.decrement,.decrement,.decrement,.decrement].publisher.subscribe(counterBloc.subscriber)
-        XCTAssertEqual(counterBloc.value,CounterState(count:-8))
+        [.decrement, .decrement, .decrement, .decrement].publisher.subscribe(counterBloc.subscriber)
+        XCTAssertEqual(counterBloc.value, CounterState(count: -4))
+        [.decrement, .decrement, .decrement, .decrement].publisher.subscribe(counterBloc.subscriber)
+        XCTAssertEqual(counterBloc.value, CounterState(count: -8))
     }
-
 }

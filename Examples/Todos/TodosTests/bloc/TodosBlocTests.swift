@@ -5,20 +5,18 @@
 //  Created by Wellington Soares on 31/03/21.
 //
 
-import XCTest
 import Combine
 import CombineBloc
 @testable import Todos
+import XCTest
 
 class TodosBlocTests: XCTestCase {
-
-
     func testLoadedAfterDelay() {
         let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 1))
         XCTAssertEqual(todosBloc.value, .Loading)
 
-        let predicate = NSPredicate() { any, _ in
-            return todosBloc.value == .Loaded([])
+        let predicate = NSPredicate { _, _ in
+            todosBloc.value == .Loaded([])
         }
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: todosBloc)
         let result = XCTWaiter().wait(for: [expectation], timeout: 1.1)
@@ -32,8 +30,8 @@ class TodosBlocTests: XCTestCase {
         let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 1, mustFail: true))
         XCTAssertEqual(todosBloc.value, .Loading)
 
-        let predicate = NSPredicate() { any, _ in
-            return todosBloc.value == .Error
+        let predicate = NSPredicate { _, _ in
+            todosBloc.value == .Error
         }
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: todosBloc)
         let result = XCTWaiter().wait(for: [expectation], timeout: 1.1)
@@ -98,6 +96,4 @@ class TodosBlocTests: XCTestCase {
         Just(.Update(initialTodo.copyWith(isDone: true))).subscribe(todosBloc.subscriber)
         XCTAssertEqual(todosBloc.value, .Loaded([finalTodo]))
     }
-
-
 }

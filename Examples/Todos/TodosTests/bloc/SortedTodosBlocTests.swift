@@ -5,13 +5,12 @@
 //  Created by Wellington Soares on 31/03/21.
 //
 
-import XCTest
 import Combine
 import CombineBloc
 @testable import Todos
+import XCTest
 
 class SortedTodosBlocTests: XCTestCase {
-
     let savedTodos = [
         Todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000001"
         )!, name: "First", isDone: true),
@@ -21,7 +20,6 @@ class SortedTodosBlocTests: XCTestCase {
         )!, name: "Fourth", isDone: true),
         Todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000003"
         )!, name: "Third", isDone: true),
-
     ]
 
     func testInitialSortRule() {
@@ -43,8 +41,8 @@ class SortedTodosBlocTests: XCTestCase {
 
         let sortedTodosBloc = SortedTodosBloc(todosBloc: TodosBloc(repository: MockTodosRepository(savedTodos: Set(savedTodos), delay: 0)))
         XCTAssertEqual(sortedTodosBloc.value, .init(todosState: .Loading, sortRule: .id))
-        let predicate = NSPredicate() { any, _ in
-            return sortedTodosBloc.value == .init(todosState: .Loaded(savedTodosIdSorted), sortRule: .id)
+        let predicate = NSPredicate { _, _ in
+            sortedTodosBloc.value == .init(todosState: .Loaded(savedTodosIdSorted), sortRule: .id)
         }
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: sortedTodosBloc)
         let result = XCTWaiter().wait(for: [expectation], timeout: 0.1)
@@ -67,8 +65,8 @@ class SortedTodosBlocTests: XCTestCase {
 
         let sortedTodosBloc = SortedTodosBloc(todosBloc: TodosBloc(repository: MockTodosRepository(savedTodos: Set(savedTodos), delay: 0)))
         XCTAssertEqual(sortedTodosBloc.value, .init(todosState: .Loading, sortRule: .id))
-        let predicate = NSPredicate() { any, _ in
-            return sortedTodosBloc.value == .init(todosState: .Loaded(savedTodosNameSorted), sortRule: .name)
+        let predicate = NSPredicate { _, _ in
+            sortedTodosBloc.value == .init(todosState: .Loaded(savedTodosNameSorted), sortRule: .name)
         }
         Just(.UpdateSortRule(.name)).subscribe(sortedTodosBloc.subscriber)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: sortedTodosBloc)
@@ -87,13 +85,13 @@ class SortedTodosBlocTests: XCTestCase {
             Todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000003"
             )!, name: "Third", isDone: true),
             Todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000002"
-            )!, name: "Second", isDone: false)
+            )!, name: "Second", isDone: false),
         ]
 
         let sortedTodosBloc = SortedTodosBloc(todosBloc: TodosBloc(repository: MockTodosRepository(savedTodos: Set(savedTodos), delay: 0)))
         XCTAssertEqual(sortedTodosBloc.value, .init(todosState: .Loading, sortRule: .id))
-        let predicate = NSPredicate() { any, _ in
-            return sortedTodosBloc.value == .init(todosState: .Loaded(savedTodosDoneSorted), sortRule: .done)
+        let predicate = NSPredicate { _, _ in
+            sortedTodosBloc.value == .init(todosState: .Loaded(savedTodosDoneSorted), sortRule: .done)
         }
         Just(.UpdateSortRule(.done)).subscribe(sortedTodosBloc.subscriber)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: sortedTodosBloc)
@@ -102,5 +100,4 @@ class SortedTodosBlocTests: XCTestCase {
         default: XCTAssertEqual(sortedTodosBloc.value, .init(todosState: .Loaded(savedTodosDoneSorted), sortRule: .done))
         }
     }
-
 }

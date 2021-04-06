@@ -1,10 +1,8 @@
-import XCTest
 import Combine
 @testable import CombineBloc
-
+import XCTest
 
 final class CombineBlocTests: XCTestCase {
-
     enum TestEvent: Equatable {
         case toFirstState
         case toSecondState
@@ -20,7 +18,7 @@ final class CombineBlocTests: XCTestCase {
     final class TestBloc: Bloc<TestEvent, TestState> {
         init() {
             super.init(initialValue: .FirstState) {
-                event, state, emit in
+                event, _, emit in
                 switch event {
                 case .toFirstState:
                     emit(.FirstState)
@@ -74,11 +72,11 @@ final class CombineBlocTests: XCTestCase {
     func testSubscriberSequence() {
         let testBloc = TestBloc()
         XCTAssertEqual(testBloc.value, TestState.FirstState)
-        [.toSecondState,.toThirdState].publisher.subscribe(testBloc.subscriber)
+        [.toSecondState, .toThirdState].publisher.subscribe(testBloc.subscriber)
         XCTAssertEqual(testBloc.value, TestState.ThirdState)
     }
 
-    func testCance(){
+    func testCance() {
         let testBloc = TestBloc()
         XCTAssertEqual(testBloc.value, TestState.FirstState)
         testBloc.cancel()
@@ -88,7 +86,6 @@ final class CombineBlocTests: XCTestCase {
         XCTAssertEqual(testBloc.value, TestState.FirstState)
     }
 
-
     static var allTests = [
         ("testInitialState", testInitialState),
         ("testMapEventToState", testMapEventToState),
@@ -96,6 +93,5 @@ final class CombineBlocTests: XCTestCase {
         ("testSubscriber", testSubscriber),
         ("testSubscriberSequence", testSubscriberSequence),
         ("testCance", testCance),
-
     ]
 }

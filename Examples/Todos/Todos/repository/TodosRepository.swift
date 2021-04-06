@@ -5,8 +5,8 @@
 //  Created by Wellington Soares on 31/03/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 struct Todo: Equatable, Identifiable, Hashable {
     let id: UUID
@@ -16,7 +16,7 @@ struct Todo: Equatable, Identifiable, Hashable {
     func copyWith(name: String? = nil, isDone: Bool? = nil) -> Todo {
         let name = name ?? self.name
         let isDone = isDone ?? self.isDone
-        return Todo(id: self.id, name: name, isDone: isDone)
+        return Todo(id: id, name: name, isDone: isDone)
     }
 }
 
@@ -33,7 +33,6 @@ protocol TodosRepository {
 }
 
 final class MockTodosRepository: TodosRepository {
-
     private var savedTodos: Set<Todo> {
         didSet {
             cancellable = Just(Result.success(savedTodos)).assign(to: \.subject.value, on: self)
@@ -62,8 +61,8 @@ final class MockTodosRepository: TodosRepository {
 
     func add(_ todo: Todo) {
         savedTodos.insert(todo)
-
     }
+
     func remove(_ id: UUID) {
         if let index = savedTodos.firstIndex(where: { $0.id == id }) {
             savedTodos.remove(at: index)
@@ -71,8 +70,7 @@ final class MockTodosRepository: TodosRepository {
     }
 
     func update(_ todo: Todo) {
-        self.remove(todo.id)
-        self.add(todo)
-
+        remove(todo.id)
+        add(todo)
     }
 }

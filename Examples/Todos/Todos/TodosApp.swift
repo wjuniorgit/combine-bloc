@@ -5,8 +5,8 @@
 //  Created by Wellington Soares on 31/03/21.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 @main
 struct TodosApp: App {
@@ -17,12 +17,11 @@ struct TodosApp: App {
     }
 }
 
-
 struct ContentView: View {
     let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [Todo(id: UUID(), name: "homework", isDone: false),
                                                                            Todo(id: UUID(), name: "chores", isDone: false),
                                                                            Todo(id: UUID(), name: "breakfast", isDone: true)]))
     var body: some View {
-        TodosViewRoot(todosBloc: todosBloc) }
+        TodosViewRoot(todosBloc: todosBloc)
+    }
 }
-

@@ -5,13 +5,11 @@
 //  Created by Wellington Soares on 01/04/21.
 //
 
-import Foundation
 import Combine
 import CombineBloc
+import Foundation
 
-
-struct TodoRemoved: Error, Equatable {
-}
+struct TodoRemoved: Error, Equatable {}
 
 enum EditTodoEvent: Equatable {
     case NameChanged(String)
@@ -24,7 +22,6 @@ enum EditTodoEvent: Equatable {
 enum EditTodoState: Equatable {
     case ValidTodo(ValidTodoState)
     case RemovedTodo
-
 }
 
 struct ValidTodoState: Equatable {
@@ -46,16 +43,13 @@ struct ValidTodoState: Equatable {
     }
 }
 
-
 final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
-
     private var cancellable: AnyCancellable?
     private var todo: Todo?
     private let todosState: AnyPublisher<TodosState, Never>
 
-
     private static func isNameValid(_ name: String) -> Bool {
-        return NSPredicate(format: "SELF MATCHES %@", ".{1,}").evaluate(with: name)
+        NSPredicate(format: "SELF MATCHES %@", ".{1,}").evaluate(with: name)
     }
 
     init(todo: Todo? = nil, todosState: AnyPublisher<TodosState, Never>, add: @escaping (Todo) -> Void, update: @escaping (Todo) -> Void, remove: @escaping (UUID) -> Void) {
@@ -65,22 +59,23 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
                                                                   isDone: todo?.isDone ?? false,
                                                                   id: todo?.id ?? UUID(), isSaved: todo != nil ? true : false, canSave: false, isNameValid: true))
 
-        super.init(initialValue: initialValue)
-        { event, state, emit in
+        super.init(initialValue: initialValue) { event, state, emit in
 
             switch event {
-            case .NameChanged(let name):
+            case let .NameChanged(name):
                 if case let EditTodoState.ValidTodo(state) = state {
                     let isNameValid = EditTodoBloc.isNameValid(name)
-                    emit(.ValidTodo(state.copyWith(name: name, canSave: isNameValid, isNameValid: isNameValid))) }
-            case .DoneChanged(let isDone):
+                    emit(.ValidTodo(state.copyWith(name: name, canSave: isNameValid, isNameValid: isNameValid)))
+                }
+            case let .DoneChanged(isDone):
                 if case let EditTodoState.ValidTodo(state) = state {
-                    emit(.ValidTodo(state.copyWith(isDone: isDone, canSave: true))) }
-            case .TodoUpdated(let result):
+                    emit(.ValidTodo(state.copyWith(isDone: isDone, canSave: true)))
+                }
+            case let .TodoUpdated(result):
                 switch result {
-                case .success(let todo):
+                case let .success(todo):
                     emit(.ValidTodo(ValidTodoState(name: todo.name, isDone: todo.isDone, id: todo.id, isSaved: true, canSave: false, isNameValid: true)))
-                case.failure(_):
+                case .failure:
                     emit(.RemovedTodo)
                 }
             case .SaveTodo:
@@ -101,7 +96,6 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
         cancellable = todosState.sink { newTodosState in
 
             if case let .ValidTodo(editTodoState) = self.value {
-
                 if case let .Loaded(newTodos) = newTodosState {
                     let optionalTodo: Todo? = newTodos.first { todo -> Bool in
                         todo.id == editTodoState.id

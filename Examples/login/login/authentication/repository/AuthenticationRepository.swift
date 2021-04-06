@@ -5,8 +5,8 @@
 //  Created by Wellington Soares on 26/03/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 struct User: Equatable {
     let id: String
@@ -30,7 +30,6 @@ protocol AuthenticationRepository {
 }
 
 final class MockAuthRepository: AuthenticationRepository {
-
     var user: AnyPublisher<Result<User, AuthenticationRepositoryError>, Never> {
         subject.eraseToAnyPublisher()
     }
@@ -40,11 +39,10 @@ final class MockAuthRepository: AuthenticationRepository {
 
     func logOut() {
         cancellable = Just(Result.failure(AuthenticationRepositoryError.unauthenticated)).assign(to: \.subject.value, on: self)
-
     }
 
     func logIn(username: String, password: String) {
-        if username == "user" && password == "pass" {
+        if username == "user", password == "pass" {
             cancellable = Just(Result.success(User(id: "123", name: username))).delay(for: 2, scheduler: RunLoop.main).assign(to: \.subject.value, on: self)
         } else {
             cancellable = Just(Result.failure(AuthenticationRepositoryError.incorrectCredentials(username, password))).delay(for: 2, scheduler: RunLoop.main).assign(to: \.subject.value, on: self)

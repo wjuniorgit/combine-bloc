@@ -3,6 +3,7 @@
 
 [![Swift Version][swift-image]][swift-url]
 [![License][license-image]][license-url]
+[![Actions Status](https://github.com/wjuniorgit/combine-bloc/workflows/Swift/badge.svg)](https://github.com/wjuniorgit/combine-bloc/actions)
 
 BLoC design pattern was initially conceived to help separate presentation from business logic and thus, also increase code reuse as Blocs should be platform agnostic. 
 The key points are:

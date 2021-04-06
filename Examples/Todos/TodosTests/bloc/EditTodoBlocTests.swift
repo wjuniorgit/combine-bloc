@@ -5,13 +5,12 @@
 //  Created by Wellington Soares on 31/03/21.
 //
 
-import XCTest
 import Combine
 import CombineBloc
 @testable import Todos
+import XCTest
 
 class EditTodoBlocTests: XCTestCase {
-
     func testEditInitialState() {
         let todo = Todo(id: UUID(), name: "Todo", isDone: false)
         let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [todo], delay: 0))
@@ -51,16 +50,15 @@ class EditTodoBlocTests: XCTestCase {
         [.NameChanged("Tod"), .NameChanged("To"), .NameChanged("T"), .NameChanged("")].publisher.subscribe(editTodoBloc.subscriber)
 
         let invalidNameState = EditTodoState.ValidTodo(ValidTodoState(name: "",
-                                                                  isDone: todo.isDone,
-                                                                  id: todo.id, isSaved: true, canSave: false, isNameValid: false))
+                                                                      isDone: todo.isDone,
+                                                                      id: todo.id, isSaved: true, canSave: false, isNameValid: false))
         XCTAssertEqual(editTodoBloc.value, invalidNameState)
 
         Just(.NameChanged("T")).subscribe(editTodoBloc.subscriber)
         let validNameState = EditTodoState.ValidTodo(ValidTodoState(name: "T",
-                                                                  isDone: todo.isDone,
-                                                                  id: todo.id, isSaved: true, canSave: true, isNameValid: true))
+                                                                    isDone: todo.isDone,
+                                                                    id: todo.id, isSaved: true, canSave: true, isNameValid: true))
         XCTAssertEqual(editTodoBloc.value, validNameState)
-
     }
 
     func testDoneChanged() {
@@ -70,13 +68,11 @@ class EditTodoBlocTests: XCTestCase {
         let editTodoBloc = EditTodoBloc(todo: todo, todosState: todosBloc.publisher, add: { todosBloc.send(.Add($0)) }, update: { todosBloc.send(.Update($0)) }, remove: { todosBloc.send(.Remove($0)) })
 
         let toggleDoneState = EditTodoState.ValidTodo(ValidTodoState(name: "Todo",
-                                                                  isDone: true,
-                                                                  id: todo.id, isSaved: true, canSave: true, isNameValid: true))
+                                                                     isDone: true,
+                                                                     id: todo.id, isSaved: true, canSave: true, isNameValid: true))
 
-        Just(.DoneChanged(true) ).subscribe(editTodoBloc.subscriber)
+        Just(.DoneChanged(true)).subscribe(editTodoBloc.subscriber)
 
         XCTAssertEqual(editTodoBloc.value, toggleDoneState)
-
     }
-
 }

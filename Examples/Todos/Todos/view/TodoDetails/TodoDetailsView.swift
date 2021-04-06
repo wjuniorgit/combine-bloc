@@ -14,7 +14,6 @@ struct TodoDetailsView: View {
     let save: () -> Void
     let remove: () -> Void
 
-
     var body: some View {
         VStack {
             HStack {
@@ -31,7 +30,8 @@ struct TodoDetailsView: View {
             Button(action: { toggleIsDone() }) {
                 Image(systemName: state.isDone ? "checkmark.square" : "square").resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 40) }.padding()
+                    .frame(width: 40)
+            }.padding()
             Spacer()
             HStack {
                 Button("Save", action: { save() })
@@ -43,7 +43,6 @@ struct TodoDetailsView: View {
                     .foregroundColor(Color.red)
                     .opacity(state.isSaved ? 1.0 : 0.0)
                     .padding()
-
             }
         }.padding().navigationBarTitle(state.isSaved ? "Edit Todo" : "New Todo")
     }

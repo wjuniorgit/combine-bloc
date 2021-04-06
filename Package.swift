@@ -9,16 +9,19 @@ let package = Package(
     products: [
         .library(
             name: "CombineBloc",
-            targets: ["CombineBloc"]),
+            targets: ["CombineBloc"]
+        ),
     ],
     dependencies: [
     ],
     targets: [
         .target(
             name: "CombineBloc",
-            dependencies: []),
+            dependencies: []
+        ),
         .testTarget(
             name: "CombineBlocTests",
-            dependencies: ["CombineBloc"]),
+            dependencies: ["CombineBloc"]
+        ),
     ]
 )
