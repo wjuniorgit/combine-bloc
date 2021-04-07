@@ -44,9 +44,7 @@ public struct StateViewBuilder<Event: Equatable, BlocState: Equatable, Content: 
     ///   - publisher: The `State` publisher to listen for every new `State`.
     ///   - animation: An animation sequence performed when the `State` changes.
     ///   - builder: A closure to be recreated on each new `State`.
-    public init(publisher: AnyPublisher<BlocState, Never>, value: BlocState, animation: Animation? = .default, @ViewBuilder builder: @escaping (BlocState) -> Content
-    )
-    {
+    public init(publisher: AnyPublisher<BlocState, Never>, value: BlocState, animation: Animation? = .default, @ViewBuilder builder: @escaping (BlocState) -> Content) {
         self.publisher = publisher
         self.builder = builder
         _state = State(initialValue: value)

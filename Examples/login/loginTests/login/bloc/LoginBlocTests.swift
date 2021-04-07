@@ -5,14 +5,12 @@
 //  Created by Wellington Soares on 06/04/21.
 //
 
-
 import Combine
 import CombineBloc
 @testable import Login
 import XCTest
 
 class LoginBlocTests: XCTestCase {
-
     func testAuthenticatedInitialState() {
         let loginBloc = LoginBloc(authenticationState: .authenticated(User(id: "123", name: "user")), onLoginRequested: { _, _ in
         })
@@ -62,7 +60,8 @@ class LoginBlocTests: XCTestCase {
 
         let loginBloc = LoginBloc(authenticationState: .unauthenticated(.unauthenticated), onLoginRequested: { user, password in
             if user == "user", password == "pass" {
-                expectation.fulfill() }
+                expectation.fulfill()
+            }
         })
         Just(LoginEvent.loginUsernameChanged("user")).subscribe(loginBloc.subscriber)
         Just(LoginEvent.loginPasswordChanged("pass")).subscribe(loginBloc.subscriber)

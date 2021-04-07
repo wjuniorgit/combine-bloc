@@ -11,7 +11,6 @@ import CombineBloc
 import XCTest
 
 class AuthenticationBlocTests: XCTestCase {
-
     func testAuthenticationSuscess() {
         let authenticationBloc = AuthenticationBloc(repository: MockAuthRepository())
 
@@ -44,11 +43,9 @@ class AuthenticationBlocTests: XCTestCase {
         }
     }
 
-
     func testAuthenticating() {
         let authenticationBloc = AuthenticationBloc(repository: MockAuthRepository())
         Just(.AuthenticationLoginRequested(username: "user", password: "pass")).subscribe(authenticationBloc.subscriber)
         XCTAssertEqual(authenticationBloc.value, .authenticating("user", "pass"))
     }
-
 }

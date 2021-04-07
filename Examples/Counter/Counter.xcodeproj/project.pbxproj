@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		55558FD4260A948100135F57 /* CounterBloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55558FD3260A948100135F57 /* CounterBloc.swift */; };
+		5557189F261D3EE300988075 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5557189E261D3EE300988075 /* README.md */; };
 		55AD842F260A9C6800456D92 /* CombineBloc in Frameworks */ = {isa = PBXBuildFile; productRef = 55AD842E260A9C6800456D92 /* CombineBloc */; };
 		55DECF2E260A933700F29993 /* CounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DECF2D260A933700F29993 /* CounterApp.swift */; };
 		55DECF32260A933A00F29993 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55DECF31260A933A00F29993 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		55558FD3260A948100135F57 /* CounterBloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterBloc.swift; sourceTree = "<group>"; };
+		5557189E261D3EE300988075 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		55DECF2A260A933700F29993 /* Counter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Counter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55DECF2D260A933700F29993 /* CounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterApp.swift; sourceTree = "<group>"; };
 		55DECF31260A933A00F29993 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 		55DECF21260A933700F29993 = {
 			isa = PBXGroup;
 			children = (
+				5557189E261D3EE300988075 /* README.md */,
 				55DECF2C260A933700F29993 /* Counter */,
 				55DECF3E260A933B00F29993 /* CounterTests */,
 				55DECF2B260A933700F29993 /* Products */,
@@ -183,6 +186,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5557189F261D3EE300988075 /* README.md in Resources */,
 				55DECF32260A933A00F29993 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,7 +9,6 @@ import Combine
 /// A `Bloc` is a composition of a `Subscriber` of `Event` and a `Publisher` of `State`.
 /// It receives `Event` as input and maps it to a current `State`.
 open class Bloc<Event: Equatable, State: Equatable> {
-
     /// Initializes a `Bloc` from an initial `State` value, and a mapEventToState closure.
     ///
     /// - Parameters:
@@ -88,11 +87,12 @@ public struct Transition<Event: Equatable, State: Equatable>: Equatable {
 }
 
 /// A `BlocSubscriber`is a subscriber that does not cancel on reveicing a `Subscribers.Completion`.
-final public class BlocSubscriber<Input>: Subscriber {
+public final class BlocSubscriber<Input>: Subscriber {
     fileprivate init(onReceiveInput: @escaping (Input) -> Void, onReceiveInputSubscription: @escaping (Subscription) -> Void) {
         self.onReceiveInput = onReceiveInput
         self.onReceiveInputSubscription = onReceiveInputSubscription
     }
+
     public typealias Failure = Never
 
     /// Tells the subscriber that the publisher has completed publishing, either normally or with an error.
@@ -119,15 +119,11 @@ final public class BlocSubscriber<Input>: Subscriber {
         onReceiveInputSubscription(subscription)
     }
 
-
     fileprivate let onReceiveInput: (Input) -> Void
     fileprivate let onReceiveInputSubscription: (Subscription) -> Void
 }
 
-
-
 public extension Bloc {
-
     /// Used for debugging purposes.
     /// It injects a closure that my print or debug on every `Bloc` lifecycle event.
     ///

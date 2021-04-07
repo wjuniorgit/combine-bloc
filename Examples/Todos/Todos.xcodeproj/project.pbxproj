@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5519AB6C2616501400EBA9A0 /* EditTodoBloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5519AB6B2616501400EBA9A0 /* EditTodoBloc.swift */; };
+		555718A7261D40C600988075 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 555718A6261D40C600988075 /* README.md */; };
 		5571C6952616079500D3C721 /* FilteredTodosBloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571C6942616079500D3C721 /* FilteredTodosBloc.swift */; };
 		55C44C0B2614A2A500B17306 /* TodosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C44C0A2614A2A500B17306 /* TodosApp.swift */; };
 		55C44C0F2614A2AD00B17306 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55C44C0E2614A2AD00B17306 /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		5519AB6B2616501400EBA9A0 /* EditTodoBloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTodoBloc.swift; sourceTree = "<group>"; };
+		555718A6261D40C600988075 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5571C6942616079500D3C721 /* FilteredTodosBloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredTodosBloc.swift; sourceTree = "<group>"; };
 		55C44C072614A2A500B17306 /* Todos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55C44C0A2614A2A500B17306 /* TodosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosApp.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 		55C44BFE2614A2A500B17306 = {
 			isa = PBXGroup;
 			children = (
+				555718A6261D40C600988075 /* README.md */,
 				55C44C092614A2A500B17306 /* Todos */,
 				55C44C1B2614A2AD00B17306 /* TodosTests */,
 				55C44C082614A2A500B17306 /* Products */,
@@ -267,6 +270,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				555718A7261D40C600988075 /* README.md in Resources */,
 				55C44C0F2614A2AD00B17306 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

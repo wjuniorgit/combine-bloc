@@ -48,5 +48,4 @@ final class MockAuthRepository: AuthenticationRepository {
 
     private var subject = CurrentValueSubject<Result<User, AuthenticationRepositoryError>, Never>(Result.failure(AuthenticationRepositoryError.unauthenticated))
     private var cancellable: AnyCancellable?
-
 }
