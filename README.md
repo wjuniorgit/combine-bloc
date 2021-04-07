@@ -91,9 +91,9 @@ Distributed under the MIT license. See ``LICENSE`` for more information.
 [license-url]: LICENSE
 [bloc-video-url]: https://youtu.be/PLHln7wHgPE?t=1288
 [bloc-lib-url]: https://bloclibrary.dev/
-[counter-example]: (Examples/Counter/)
-[login-example]: (Examples/login/)
-[todo-example]: (Examples/Todos/)
+[counter-example]: Examples/Counter/
+[login-example]: Examples/login/
+[todo-example]: Examples/Todos/
 
 
 
