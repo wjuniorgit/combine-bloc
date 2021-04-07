@@ -26,7 +26,7 @@ final class AuthenticationBloc: Bloc<AuthenticationEvent, AuthenticationState> {
     private var cancellable: AnyCancellable?
     private let repository: AuthenticationRepository
 
-    init(repository: AuthenticationRepository = MockAuthRepository()) {
+    init(repository: AuthenticationRepository) {
         self.repository = repository
 
         super.init(initialValue: AuthenticationState.unknown) { event, _, emit in

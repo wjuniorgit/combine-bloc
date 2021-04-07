@@ -18,6 +18,6 @@ struct LoginApp: App {
 
 struct ContentView: View {
     var body: some View {
-        AuthenticationView(authenticationBloc: AuthenticationBloc())
+        AuthenticationView(authenticationBloc: AuthenticationBloc(repository: MockAuthRepository()))
     }
 }

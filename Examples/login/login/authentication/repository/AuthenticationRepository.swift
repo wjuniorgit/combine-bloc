@@ -12,7 +12,7 @@ struct User: Equatable {
     let id: String
     let name: String
 
-    fileprivate init(id: String, name: String) {
+    init(id: String, name: String) {
         self.id = id
         self.name = name
     }
@@ -34,9 +34,6 @@ final class MockAuthRepository: AuthenticationRepository {
         subject.eraseToAnyPublisher()
     }
 
-    private var subject = CurrentValueSubject<Result<User, AuthenticationRepositoryError>, Never>(Result.failure(AuthenticationRepositoryError.unauthenticated))
-    private var cancellable: AnyCancellable?
-
     func logOut() {
         cancellable = Just(Result.failure(AuthenticationRepositoryError.unauthenticated)).assign(to: \.subject.value, on: self)
     }
@@ -48,4 +45,8 @@ final class MockAuthRepository: AuthenticationRepository {
             cancellable = Just(Result.failure(AuthenticationRepositoryError.incorrectCredentials(username, password))).delay(for: 2, scheduler: RunLoop.main).assign(to: \.subject.value, on: self)
         }
     }
+
+    private var subject = CurrentValueSubject<Result<User, AuthenticationRepositoryError>, Never>(Result.failure(AuthenticationRepositoryError.unauthenticated))
+    private var cancellable: AnyCancellable?
+
 }

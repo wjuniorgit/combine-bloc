@@ -17,6 +17,8 @@
 		551BBC73260E8C4400513B1B /* LoginBloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551BBC72260E8C4400513B1B /* LoginBloc.swift */; };
 		551BBC77260E8CAD00513B1B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551BBC76260E8CAD00513B1B /* HomeView.swift */; };
 		551BBC7B260E8DC100513B1B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551BBC7A260E8DC100513B1B /* LoginView.swift */; };
+		55A31895261D29570001AD1A /* AuthenticationBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A31894261D29570001AD1A /* AuthenticationBlocTests.swift */; };
+		55A31899261D30610001AD1A /* LoginBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A31898261D30610001AD1A /* LoginBlocTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,8 @@
 		551BBC72260E8C4400513B1B /* LoginBloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBloc.swift; sourceTree = "<group>"; };
 		551BBC76260E8CAD00513B1B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		551BBC7A260E8DC100513B1B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		55A31894261D29570001AD1A /* AuthenticationBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationBlocTests.swift; sourceTree = "<group>"; };
+		55A31898261D30610001AD1A /* LoginBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBlocTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,7 @@
 		5505BB77261BF93D00F3094E /* bloc */ = {
 			isa = PBXGroup;
 			children = (
+				55A31894261D29570001AD1A /* AuthenticationBlocTests.swift */,
 			);
 			path = bloc;
 			sourceTree = "<group>";
@@ -90,6 +95,7 @@
 		5505BB79261BF94A00F3094E /* bloc */ = {
 			isa = PBXGroup;
 			children = (
+				55A31898261D30610001AD1A /* LoginBlocTests.swift */,
 			);
 			path = bloc;
 			sourceTree = "<group>";
@@ -334,7 +340,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55A31899261D30610001AD1A /* LoginBlocTests.swift in Sources */,
 				551BBC1C260E80D100513B1B /* LoginTests.swift in Sources */,
+				55A31895261D29570001AD1A /* AuthenticationBlocTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
