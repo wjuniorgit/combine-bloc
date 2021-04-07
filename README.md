@@ -9,6 +9,7 @@ BLoC is a business logic layer abstraction in which you input an `Event` and it 
 This abstraction contributes to the construction of reactive apps that respects the unidirectional data flow and have a single source of truth. 
 A `Bloc` from the CombineBloc package is a composite object that has a `Subscriber` which reveives `Event` and a `Publisher` of `State`.
 A closure is called inside the Bloc everytime a new `Event` is received by the `Subscriber`. This closure may emit a new `State` through the `Publisher`.
+
 The key points are:
 * Inputs and outputs are implemented with event-processing operators
 * Dependencies must be injectable and platform agnostic
@@ -41,18 +42,21 @@ This package has three use case examples implemented:
 
 ### Counter Bloc example
 #### Counter Events
-```enum CounterEvent: Equatable {
+```swift
+enum CounterEvent: Equatable {
 case increment
 case decrement
 }
 ```
 #### Counter State
-```struct CounterState: Equatable {
+```swift
+struct CounterState: Equatable {
 let count: Int
 }
 ```
 #### Counter Bloc
-```final class CounterBloc: Bloc<CounterEvent, CounterState> {
+```swift
+final class CounterBloc: Bloc<CounterEvent, CounterState> {
 init() {
     super.init(initialValue: CounterState(count: 0)) {
         event, state, emit in
@@ -87,9 +91,9 @@ Distributed under the MIT license. See ``LICENSE`` for more information.
 [license-url]: LICENSE
 [bloc-video-url]: https://youtu.be/PLHln7wHgPE?t=1288
 [bloc-lib-url]: https://bloclibrary.dev/
-[counter-example](Examples/Counter/)
-[login-example](Examples/login/)
-[todo-example](Examples/Todos/)
+[counter-example]: (Examples/Counter/)
+[login-example]: (Examples/login/)
+[todo-example]: (Examples/Todos/)
 
 
 
