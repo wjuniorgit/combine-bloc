@@ -7,7 +7,7 @@
 
 BLoC is a business logic layer abstraction in which you input an `Event` and it outputs a `State`. 
 This abstraction contributes to the construction of reactive apps that respects the unidirectional data flow and have a single source of truth. 
-A `Bloc` from the CombineBloc package is a composite object that has a `Subscriber` which reveives `Event` and a `Publisher` of `State`.
+A `Bloc` from the CombineBloc package is a composite object that has a `Subscriber` which receives `Event` and a `Publisher` of `State`.
 A closure is called inside the Bloc everytime a new `Event` is received by the `Subscriber`. This closure may emit a new `State` through the `Publisher`.
 
 The key points are:
