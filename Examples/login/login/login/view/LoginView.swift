@@ -10,62 +10,31 @@ import CombineBloc
 import SwiftUI
 
 struct LoginView: View {
-    var loginBloc: Bloc<LoginEvent, LoginState>
+  var loginBloc: Bloc<LoginEvent, LoginState>
 
-    var body: some View {
-        StateViewBuilder(bloc: loginBloc) {
-            state in
-            VStack {
-                Text("Welcome!")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .padding()
-                HStack {
-                    Image(systemName: "person")
-                    TextField("Username", text: Binding(get: { state.userName }, set: {
-                        Just(.loginUsernameChanged($0)).subscribe(loginBloc.subscriber)
-                    })).autocapitalization(.none).disabled(state.loginFormState == .submitting ? true : false)
+  var body: some View {
+    StateViewBuilder(bloc: loginBloc) {
+      state in
+      VStack {
+        Text("Welcome!")
+          .font(.largeTitle)
+          .fontWeight(.semibold)
+          .padding()
 
-                }.padding()
-                    .border(state.loginFormState == .retry ? Color.pink : Color.blue, width: 2)
-                    .background(Color(white: 0.9))
-                    .cornerRadius(5.0)
-                    .padding()
-
-                HStack {
-                    Image(systemName: "lock")
-                    SecureField("Password", text: Binding(get: { state.password }, set: {
-                        Just(.loginPasswordChanged($0)).subscribe(loginBloc.subscriber)
-                    })).autocapitalization(.none).disabled(state.loginFormState == .submitting ? true : false)
-                }
-                .padding()
-                .border(state.loginFormState == .retry ? Color.pink : Color.blue, width: 2)
-                .background(Color(white: 0.9))
-                .cornerRadius(5.0)
-                .padding()
-                .disabled(state.loginFormState == .submitting ? true : false)
-                Button(action: {
-                    Just(.tryLogin).subscribe(loginBloc.subscriber)
-                }) {
-                    HStack {
-                        if state.loginFormState == .submitting {
-                            ProgressView()
-                        }
-                        Text("LOGIN")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(width: 220, height: 60)
-                            .background(Color.green)
-                            .cornerRadius(5.0)
-                            .padding()
-                    }
-                }.disabled(state.loginFormState == .submitting ? true : false)
-
-                if state.loginFormState == .retry {
-                    Text("Try again")
-                }
-            }
+        UsernameField(loginFormState: state.loginFormState, text: state.userName) {
+          Just(.loginUsernameChanged($0)).subscribe(loginBloc.subscriber)
         }
+        PasswordField(loginFormState: state.loginFormState, text: state.password) {
+          Just(.loginPasswordChanged($0)).subscribe(loginBloc.subscriber)
+        }
+
+        LoginButton(loginFormState: state.loginFormState){
+          Just(.tryLogin).subscribe(loginBloc.subscriber)
+        }
+
+        Text("Incorrect credentials").opacity(state.loginFormState == .retry ? 1.0 : 0.0)
+
+      }
     }
+  }
 }
