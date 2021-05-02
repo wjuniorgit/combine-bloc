@@ -11,41 +11,60 @@ import CombineBloc
 import XCTest
 
 class AuthenticationBlocTests: XCTestCase {
-    func testAuthenticationSuscess() {
-        let authenticationBloc = AuthenticationBloc(repository: MockAuthRepository())
+  func testAuthenticationSuscess() {
+    let authenticationBloc =
+      AuthenticationBloc(repository: MockAuthRepository())
 
-        let user = User(id: "123", name: "user")
+    let user = User(id: "123", name: "user")
 
-        let predicate = NSPredicate { _, _ in
-            authenticationBloc.value == .authenticated(user)
-        }
-        Just(.AuthenticationLoginRequested(username: "user", password: "pass")).subscribe(authenticationBloc.subscriber)
-
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: authenticationBloc)
-        let result = XCTWaiter().wait(for: [expectation], timeout: 2.1)
-        switch result {
-        default: XCTAssertEqual(authenticationBloc.value, .authenticated(user))
-        }
+    let predicate = NSPredicate { _, _ in
+      authenticationBloc.value == .authenticated(user)
     }
+    Just(.AuthenticationLoginRequested(username: "user", password: "pass"))
+      .subscribe(authenticationBloc.subscriber)
 
-    func testAuthenticationError() {
-        let authenticationBloc = AuthenticationBloc(repository: MockAuthRepository())
-
-        let predicate = NSPredicate { _, _ in
-            authenticationBloc.value == .unauthenticated(.incorrectCredentials("user", "word"))
-        }
-        Just(.AuthenticationLoginRequested(username: "user", password: "word")).subscribe(authenticationBloc.subscriber)
-
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: authenticationBloc)
-        let result = XCTWaiter().wait(for: [expectation], timeout: 2.1)
-        switch result {
-        default: XCTAssertEqual(authenticationBloc.value, .unauthenticated(.incorrectCredentials("user", "word")))
-        }
+    let expectation = XCTNSPredicateExpectation(
+      predicate: predicate,
+      object: authenticationBloc
+    )
+    let result = XCTWaiter().wait(for: [expectation], timeout: 2.1)
+    switch result {
+    default: XCTAssertEqual(authenticationBloc.value, .authenticated(user))
     }
+  }
 
-    func testAuthenticating() {
-        let authenticationBloc = AuthenticationBloc(repository: MockAuthRepository())
-        Just(.AuthenticationLoginRequested(username: "user", password: "pass")).subscribe(authenticationBloc.subscriber)
-        XCTAssertEqual(authenticationBloc.value, .authenticating("user", "pass"))
+  func testAuthenticationError() {
+    let authenticationBloc =
+      AuthenticationBloc(repository: MockAuthRepository())
+
+    let predicate = NSPredicate { _, _ in
+      authenticationBloc
+        .value == .unauthenticated(.incorrectCredentials("user", "word"))
     }
+    Just(.AuthenticationLoginRequested(username: "user", password: "word"))
+      .subscribe(authenticationBloc.subscriber)
+
+    let expectation = XCTNSPredicateExpectation(
+      predicate: predicate,
+      object: authenticationBloc
+    )
+    let result = XCTWaiter().wait(for: [expectation], timeout: 2.1)
+    switch result {
+    default: XCTAssertEqual(
+        authenticationBloc.value,
+        .unauthenticated(.incorrectCredentials("user", "word"))
+      )
+    }
+  }
+
+  func testAuthenticating() {
+    let authenticationBloc =
+      AuthenticationBloc(repository: MockAuthRepository())
+    Just(.AuthenticationLoginRequested(username: "user", password: "pass"))
+      .subscribe(authenticationBloc.subscriber)
+    XCTAssertEqual(
+      authenticationBloc.value,
+      .authenticating("user", "pass")
+    )
+  }
 }

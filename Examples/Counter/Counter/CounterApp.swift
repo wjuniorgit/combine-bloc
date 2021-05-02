@@ -11,31 +11,35 @@ import SwiftUI
 
 @main
 struct CounterApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView(counterBloc: CounterBloc())
-        }
+  var body: some Scene {
+    WindowGroup {
+      ContentView(counterBloc: CounterBloc())
     }
+  }
 }
 
 struct ContentView: View {
-    let counterBloc: Bloc<CounterEvent, CounterState>
+  let counterBloc: Bloc<CounterEvent, CounterState>
 
-    var body: some View {
-        VStack {
-            Text("Counter App").padding()
-            HStack {
-                Button(action: { Just(.decrement).subscribe(counterBloc.subscriber) }) {
-                    Text("-")
-                }.padding()
-                StateViewBuilder(bloc: counterBloc) {
-                    state in
-                    Text("\(state.count)")
-                }.padding()
-                Button(action: { Just(.increment).subscribe(counterBloc.subscriber) }) {
-                    Text("+")
-                }.padding()
-            }
-        }.font(.title)
-    }
+  var body: some View {
+    VStack {
+      Text("Counter App").padding()
+      HStack {
+        Button(action: {
+          Just(.decrement).subscribe(counterBloc.subscriber)
+        }) {
+          Text("-")
+        }.padding()
+        StateViewBuilder(bloc: counterBloc) {
+          state in
+          Text("\(state.count)")
+        }.padding()
+        Button(action: {
+          Just(.increment).subscribe(counterBloc.subscriber)
+        }) {
+          Text("+")
+        }.padding()
+      }
+    }.font(.title)
+  }
 }

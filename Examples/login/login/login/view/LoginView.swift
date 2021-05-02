@@ -21,19 +21,25 @@ struct LoginView: View {
           .fontWeight(.semibold)
           .padding()
 
-        UsernameField(loginFormState: state.loginFormState, text: state.userName) {
+        UsernameField(
+          loginFormState: state.loginFormState,
+          text: state.userName
+        ) {
           Just(.loginUsernameChanged($0)).subscribe(loginBloc.subscriber)
         }
-        PasswordField(loginFormState: state.loginFormState, text: state.password) {
+        PasswordField(
+          loginFormState: state.loginFormState,
+          text: state.password
+        ) {
           Just(.loginPasswordChanged($0)).subscribe(loginBloc.subscriber)
         }
 
-        LoginButton(loginFormState: state.loginFormState){
+        LoginButton(loginFormState: state.loginFormState) {
           Just(.tryLogin).subscribe(loginBloc.subscriber)
         }
 
-        Text("Incorrect credentials").opacity(state.loginFormState == .retry ? 1.0 : 0.0)
-
+        Text("Incorrect credentials")
+          .opacity(state.loginFormState == .retry ? 1.0 : 0.0)
       }
     }
   }

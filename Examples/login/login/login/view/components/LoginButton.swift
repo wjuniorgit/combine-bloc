@@ -9,13 +9,14 @@ import SwiftUI
 
 struct LoginButton: View {
   let loginFormState: LoginFormState
-  let action: () -> ()
+  let action: () -> Void
 
   var body: some View {
     Button(action: action) {
       HStack {
         if loginFormState == .submitting {
-          ProgressView().progressViewStyle(CircularProgressViewStyle(tint: .white))
+          ProgressView()
+            .progressViewStyle(CircularProgressViewStyle(tint: .white))
         }
         Text("LOGIN")
           .font(.headline)
@@ -29,4 +30,3 @@ struct LoginButton: View {
     }.disabled(loginFormState == .submitting ? true : false)
   }
 }
-

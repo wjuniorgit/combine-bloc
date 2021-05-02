@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct TodoItemView: View {
-    let todo: Todo
-    let buttonAction: () -> Void
-    let editTodoNavigation: EditTodoNavigationLink
+  let todo: Todo
+  let buttonAction: () -> Void
+  let editTodoNavigation: EditTodoNavigationLink
 
-    var body: some View {
-        HStack {
-            Button(action: { buttonAction() }) {
-                Image(systemName: todo.isDone ? "checkmark.square" : "square")
-            }
-            Text(todo.name)
-            Spacer()
-            editTodoNavigation(todo)
-        }.padding().buttonStyle(PlainButtonStyle())
-    }
+  var body: some View {
+    HStack {
+      Button(action: { buttonAction() }) {
+        Image(systemName: todo.isDone ? "checkmark.square" : "square")
+      }
+      Text(todo.name)
+      Spacer()
+      editTodoNavigation(todo)
+    }.padding().buttonStyle(PlainButtonStyle())
+  }
 }

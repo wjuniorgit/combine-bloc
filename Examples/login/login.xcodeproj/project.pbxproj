@@ -20,6 +20,10 @@
 		555718A3261D403400988075 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 555718A2261D403400988075 /* README.md */; };
 		55A31895261D29570001AD1A /* AuthenticationBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A31894261D29570001AD1A /* AuthenticationBlocTests.swift */; };
 		55A31899261D30610001AD1A /* LoginBlocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A31898261D30610001AD1A /* LoginBlocTests.swift */; };
+		55DE7E52263E28F100621815 /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE7E4E263E28F000621815 /* PasswordField.swift */; };
+		55DE7E53263E28F100621815 /* UsernameField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE7E4F263E28F000621815 /* UsernameField.swift */; };
+		55DE7E54263E28F100621815 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE7E50263E28F000621815 /* LoginButton.swift */; };
+		55DE7E55263E28F100621815 /* LoginInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE7E51263E28F000621815 /* LoginInputField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		555718A2261D403400988075 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		55A31894261D29570001AD1A /* AuthenticationBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationBlocTests.swift; sourceTree = "<group>"; };
 		55A31898261D30610001AD1A /* LoginBlocTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBlocTests.swift; sourceTree = "<group>"; };
+		55DE7E4E263E28F000621815 /* PasswordField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
+		55DE7E4F263E28F000621815 /* UsernameField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameField.swift; sourceTree = "<group>"; };
+		55DE7E50263E28F000621815 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		55DE7E51263E28F000621815 /* LoginInputField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +183,7 @@
 		551BBC58260E872000513B1B /* view */ = {
 			isa = PBXGroup;
 			children = (
+				55DE7E4D263E28F000621815 /* components */,
 				551BBC7A260E8DC100513B1B /* LoginView.swift */,
 			);
 			path = view;
@@ -226,6 +235,18 @@
 				551BBC6E260E8C2800513B1B /* AuthenticationView.swift */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		55DE7E4D263E28F000621815 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				55DE7E4E263E28F000621815 /* PasswordField.swift */,
+				55DE7E4F263E28F000621815 /* UsernameField.swift */,
+				55DE7E50263E28F000621815 /* LoginButton.swift */,
+				55DE7E51263E28F000621815 /* LoginInputField.swift */,
+			);
+			name = components;
+			path = ../../../../login/login/login/view/components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -334,7 +355,11 @@
 				551BBC7B260E8DC100513B1B /* LoginView.swift in Sources */,
 				551BBC73260E8C4400513B1B /* LoginBloc.swift in Sources */,
 				551BBC0A260E80CB00513B1B /* LoginApp.swift in Sources */,
+				55DE7E55263E28F100621815 /* LoginInputField.swift in Sources */,
 				551BBC77260E8CAD00513B1B /* HomeView.swift in Sources */,
+				55DE7E54263E28F100621815 /* LoginButton.swift in Sources */,
+				55DE7E53263E28F100621815 /* UsernameField.swift in Sources */,
+				55DE7E52263E28F100621815 /* PasswordField.swift in Sources */,
 				551BBC6F260E8C2800513B1B /* AuthenticationView.swift in Sources */,
 				551BBC62260E88F300513B1B /* AuthenticationRepository.swift in Sources */,
 			);

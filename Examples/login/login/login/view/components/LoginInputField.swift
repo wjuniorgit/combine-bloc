@@ -7,21 +7,21 @@
 
 import SwiftUI
 
-
 struct LoginInputField: View {
   let loginFormState: LoginFormState
   let isPassword: Bool
   let label: String
   let text: String
-  let set: (String) -> ()
+  let set: (String) -> Void
   let icon: Image
 
-  init(label: String,
-       loginFormState: LoginFormState,
-       isPassword: Bool = false,
-       icon: Image = Image(systemName: "person"),
-       text: String,
-       set: @escaping (String) -> ()
+  init(
+    label: String,
+    loginFormState: LoginFormState,
+    isPassword: Bool = false,
+    icon: Image = Image(systemName: "person"),
+    text: String,
+    set: @escaping (String) -> Void
   ) {
     self.loginFormState = loginFormState
     self.isPassword = isPassword
@@ -31,11 +31,10 @@ struct LoginInputField: View {
     self.icon = icon
   }
 
-
   var body: some View {
     HStack {
       icon
-      if(isPassword) {
+      if isPassword {
         SecureField(label, text: Binding(get: { text }, set: set))
       } else {
         TextField(label, text: Binding(get: { text }, set: set))
@@ -49,4 +48,3 @@ struct LoginInputField: View {
       .padding()
   }
 }
-

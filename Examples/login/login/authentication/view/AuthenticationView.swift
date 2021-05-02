@@ -10,33 +10,42 @@ import CombineBloc
 import SwiftUI
 
 struct AuthenticationView: View {
-    var authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>
+  var authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>
 
-    init(authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>) {
-        self.authenticationBloc = authenticationBloc
-    }
+  init(authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>) {
+    self.authenticationBloc = authenticationBloc
+  }
 
-    func createLoginView(_ authenticationBloc: Bloc<AuthenticationEvent, AuthenticationState>) -> LoginView {
-        LoginView(loginBloc: LoginBloc(authenticationState: authenticationBloc.value, onLoginRequested: { username, password in
-            Just(.AuthenticationLoginRequested(username: username, password: password)).subscribe(authenticationBloc.subscriber)
-        }))
-    }
+  func createLoginView(_ authenticationBloc: Bloc<
+    AuthenticationEvent,
+    AuthenticationState
+  >) -> LoginView {
+    LoginView(loginBloc: LoginBloc(
+      authenticationState: authenticationBloc.value,
+      onLoginRequested: { username, password in
+        Just(.AuthenticationLoginRequested(
+          username: username,
+          password: password
+        )).subscribe(authenticationBloc.subscriber)
+      }
+    ))
+  }
 
-    var body: some View {
-        VStack {
-            StateViewBuilder(bloc: authenticationBloc) {
-                state in
-                switch state {
-                case .unknown:
-                    ProgressView()
-                case .unauthenticated:
-                    createLoginView(authenticationBloc)
-                case .authenticating:
-                    createLoginView(authenticationBloc)
-                case let .authenticated(user):
-                    HomeView(user: user, authenticationBloc: authenticationBloc)
-                }
-            }
+  var body: some View {
+    VStack {
+      StateViewBuilder(bloc: authenticationBloc) {
+        state in
+        switch state {
+        case .unknown:
+          ProgressView()
+        case .unauthenticated:
+          createLoginView(authenticationBloc)
+        case .authenticating:
+          createLoginView(authenticationBloc)
+        case let .authenticated(user):
+          HomeView(user: user, authenticationBloc: authenticationBloc)
         }
+      }
     }
+  }
 }

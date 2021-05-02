@@ -10,10 +10,16 @@ import SwiftUI
 struct PasswordField: View {
   let loginFormState: LoginFormState
   let text: String
-  let set: (String) -> ()
+  let set: (String) -> Void
 
   var body: some View {
-    LoginInputField(label: "Password", loginFormState: loginFormState, isPassword: true, icon: Image(systemName: "lock"), text: text, set: set)
+    LoginInputField(
+      label: "Password",
+      loginFormState: loginFormState,
+      isPassword: true,
+      icon: Image(systemName: "lock"),
+      text: text,
+      set: set
+    )
   }
 }
-

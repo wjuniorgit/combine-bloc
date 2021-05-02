@@ -11,89 +11,130 @@ import CombineBloc
 import XCTest
 
 class TodosBlocTests: XCTestCase {
-    func testLoadedAfterDelay() {
-        let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 1))
-        XCTAssertEqual(todosBloc.value, .Loading)
+  func testLoadedAfterDelay() {
+    let todosBloc =
+      TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 1))
+    XCTAssertEqual(todosBloc.value, .Loading)
 
-        let predicate = NSPredicate { _, _ in
-            todosBloc.value == .Loaded([])
-        }
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: todosBloc)
-        let result = XCTWaiter().wait(for: [expectation], timeout: 1.1)
-        switch result {
-        case .completed: XCTAssertEqual(todosBloc.value, .Loaded([]))
-        default: XCTFail()
-        }
+    let predicate = NSPredicate { _, _ in
+      todosBloc.value == .Loaded([])
     }
-
-    func testErrorAfterDelay() {
-        let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 1, mustFail: true))
-        XCTAssertEqual(todosBloc.value, .Loading)
-
-        let predicate = NSPredicate { _, _ in
-            todosBloc.value == .Error
-        }
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: todosBloc)
-        let result = XCTWaiter().wait(for: [expectation], timeout: 1.1)
-        switch result {
-        case .completed: XCTAssertEqual(todosBloc.value, .Error)
-        default: XCTFail()
-        }
+    let expectation = XCTNSPredicateExpectation(
+      predicate: predicate,
+      object: todosBloc
+    )
+    let result = XCTWaiter().wait(for: [expectation], timeout: 1.1)
+    switch result {
+    case .completed: XCTAssertEqual(todosBloc.value, .Loaded([]))
+    default: XCTFail()
     }
+  }
 
-    func testAddOneTodo() {
-        let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 0))
-        XCTAssertEqual(todosBloc.value, .Loading)
-        let firstTodo = Todo(id: UUID(), name: "First", isDone: false)
+  func testErrorAfterDelay() {
+    let todosBloc =
+      TodosBloc(repository: MockTodosRepository(
+        savedTodos: [],
+        delay: 1,
+        mustFail: true
+      ))
+    XCTAssertEqual(todosBloc.value, .Loading)
 
-        Just(.Add(firstTodo)).subscribe(todosBloc.subscriber)
-        XCTAssertEqual(todosBloc.value, .Loaded([firstTodo]))
+    let predicate = NSPredicate { _, _ in
+      todosBloc.value == .Error
     }
-
-    func testRemoveOneTodo() {
-        let firstTodo = Todo(id: UUID(), name: "First", isDone: false)
-        let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [firstTodo], delay: 0))
-        XCTAssertEqual(todosBloc.value, .Loading)
-
-        Just(.Remove(firstTodo.id)).subscribe(todosBloc.subscriber)
-        XCTAssertEqual(todosBloc.value, .Loaded([]))
+    let expectation = XCTNSPredicateExpectation(
+      predicate: predicate,
+      object: todosBloc
+    )
+    let result = XCTWaiter().wait(for: [expectation], timeout: 1.1)
+    switch result {
+    case .completed: XCTAssertEqual(todosBloc.value, .Error)
+    default: XCTFail()
     }
+  }
 
-    func testEditTodoName() {
-        let todoId = UUID()
-        let initialTodo = Todo(id: todoId, name: "First", isDone: false)
-        let finalTodo = Todo(id: todoId, name: "Second", isDone: false)
-        let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [initialTodo], delay: 0))
-        XCTAssertEqual(todosBloc.value, .Loading)
+  func testAddOneTodo() {
+    let todosBloc =
+      TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 0))
+    XCTAssertEqual(todosBloc.value, .Loading)
+    let firstTodo = Todo(id: UUID(), name: "First", isDone: false)
 
-        Just(.Update(initialTodo.copyWith(name: "Second"))).subscribe(todosBloc.subscriber)
-        XCTAssertEqual(todosBloc.value, .Loaded([finalTodo]))
-    }
+    Just(.Add(firstTodo)).subscribe(todosBloc.subscriber)
+    XCTAssertEqual(todosBloc.value, .Loaded([firstTodo]))
+  }
 
-    func testSequentialEditTodoName() {
-        let todoId = UUID()
-        let initialTodo = Todo(id: todoId, name: "F", isDone: false)
-        let finalTodo = Todo(id: todoId, name: "First", isDone: false)
-        let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [initialTodo], delay: 0))
-        XCTAssertEqual(todosBloc.value, .Loading)
+  func testRemoveOneTodo() {
+    let firstTodo = Todo(id: UUID(), name: "First", isDone: false)
+    let todosBloc =
+      TodosBloc(repository: MockTodosRepository(
+        savedTodos: [firstTodo],
+        delay: 0
+      ))
+    XCTAssertEqual(todosBloc.value, .Loading)
 
-        [.Update(initialTodo.copyWith(name: "Fi")), .Update(initialTodo.copyWith(name: "Fir")), .Update(initialTodo.copyWith(name: "Firs")), .Update(initialTodo.copyWith(name: "First"))].publisher.subscribe(todosBloc.subscriber)
+    Just(.Remove(firstTodo.id)).subscribe(todosBloc.subscriber)
+    XCTAssertEqual(todosBloc.value, .Loaded([]))
+  }
 
-        XCTAssertEqual(todosBloc.value, .Loaded([finalTodo]))
+  func testEditTodoName() {
+    let todoId = UUID()
+    let initialTodo = Todo(id: todoId, name: "First", isDone: false)
+    let finalTodo = Todo(id: todoId, name: "Second", isDone: false)
+    let todosBloc =
+      TodosBloc(repository: MockTodosRepository(
+        savedTodos: [initialTodo],
+        delay: 0
+      ))
+    XCTAssertEqual(todosBloc.value, .Loading)
 
-        [.Update(initialTodo.copyWith(name: "Firs")), .Update(initialTodo.copyWith(name: "Fir")), .Update(initialTodo.copyWith(name: "Fi")), .Update(initialTodo.copyWith(name: "F"))].publisher.subscribe(todosBloc.subscriber)
+    Just(.Update(initialTodo.copyWith(name: "Second")))
+      .subscribe(todosBloc.subscriber)
+    XCTAssertEqual(todosBloc.value, .Loaded([finalTodo]))
+  }
 
-        XCTAssertEqual(todosBloc.value, .Loaded([initialTodo]))
-    }
+  func testSequentialEditTodoName() {
+    let todoId = UUID()
+    let initialTodo = Todo(id: todoId, name: "F", isDone: false)
+    let finalTodo = Todo(id: todoId, name: "First", isDone: false)
+    let todosBloc =
+      TodosBloc(repository: MockTodosRepository(
+        savedTodos: [initialTodo],
+        delay: 0
+      ))
+    XCTAssertEqual(todosBloc.value, .Loading)
 
-    func testEditTodoIdDone() {
-        let todoId = UUID()
-        let initialTodo = Todo(id: todoId, name: "First", isDone: false)
-        let finalTodo = Todo(id: todoId, name: "First", isDone: true)
-        let todosBloc = TodosBloc(repository: MockTodosRepository(savedTodos: [initialTodo], delay: 0))
-        XCTAssertEqual(todosBloc.value, .Loading)
+    [
+      .Update(initialTodo.copyWith(name: "Fi")),
+      .Update(initialTodo.copyWith(name: "Fir")),
+      .Update(initialTodo.copyWith(name: "Firs")),
+      .Update(initialTodo.copyWith(name: "First"))
+    ].publisher.subscribe(todosBloc.subscriber)
 
-        Just(.Update(initialTodo.copyWith(isDone: true))).subscribe(todosBloc.subscriber)
-        XCTAssertEqual(todosBloc.value, .Loaded([finalTodo]))
-    }
+    XCTAssertEqual(todosBloc.value, .Loaded([finalTodo]))
+
+    [
+      .Update(initialTodo.copyWith(name: "Firs")),
+      .Update(initialTodo.copyWith(name: "Fir")),
+      .Update(initialTodo.copyWith(name: "Fi")),
+      .Update(initialTodo.copyWith(name: "F"))
+    ].publisher.subscribe(todosBloc.subscriber)
+
+    XCTAssertEqual(todosBloc.value, .Loaded([initialTodo]))
+  }
+
+  func testEditTodoIdDone() {
+    let todoId = UUID()
+    let initialTodo = Todo(id: todoId, name: "First", isDone: false)
+    let finalTodo = Todo(id: todoId, name: "First", isDone: true)
+    let todosBloc =
+      TodosBloc(repository: MockTodosRepository(
+        savedTodos: [initialTodo],
+        delay: 0
+      ))
+    XCTAssertEqual(todosBloc.value, .Loading)
+
+    Just(.Update(initialTodo.copyWith(isDone: true)))
+      .subscribe(todosBloc.subscriber)
+    XCTAssertEqual(todosBloc.value, .Loaded([finalTodo]))
+  }
 }
