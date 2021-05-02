@@ -13,7 +13,7 @@ enum TodosEvent: Equatable {
   case Add(Todo)
   case Remove(UUID)
   case Update(Todo)
-  case ListUpdated(Result<Set<Todo>, TodosRepositoryError>)
+  case ListUpdated(Result<[Todo], TodosRepositoryError>)
 }
 
 enum TodosState: Equatable {
@@ -55,7 +55,7 @@ final class TodosBloc: Bloc<TodosEvent, TodosState> {
     })
 
     cancellable = repository.todos.sink { todosResult in
-      Just(.ListUpdated(todosResult)).subscribe(self.subscriber)
+      self.send(.ListUpdated(todosResult))
     }
   }
 

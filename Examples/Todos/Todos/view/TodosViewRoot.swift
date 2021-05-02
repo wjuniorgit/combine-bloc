@@ -72,7 +72,9 @@ struct TodosViewRoot: View {
                   .send(.UpdateFilterRule($0))
               },
               addTodoNavigation: addTodoNavigation,
-              editTodoNavigation: editTodoNavigation
+              editTodoNavigation: editTodoNavigation,
+              selectedSortRule: sortedTodosBloc.value.sortRule,
+              selectedFilterRule: state.filterRule
             )
           case .Error:
             Text("Error")

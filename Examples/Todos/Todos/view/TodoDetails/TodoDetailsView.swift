@@ -11,27 +11,41 @@ struct TodoDetailsView: View {
   let state: ValidTodoState
   let toggleIsDone: () -> Void
   let updateName: (String) -> Void
+  let updateDescription: (String) -> Void
   let save: () -> Void
   let remove: () -> Void
 
   var body: some View {
     VStack {
-      HStack {
-        VStack(alignment: .leading) {
-          TextField(
-            "Todo Name",
-            text: Binding(
-              get: { state.name },
-              set: { updateName($0) }
-            )
+      VStack(alignment: .leading) {
+        TextField(
+          "Todo Name",
+          text: Binding(
+            get: { state.name },
+            set: { updateName($0) }
           )
-          .font(.title)
-          Text("Please add a Name to your todo")
-            .foregroundColor(Color.red)
-            .font(.caption2)
-            .opacity(state.isNameValid ? 0.0 : 1.0)
-        }.padding()
-        Spacer()
+        )
+        .font(.title)
+        .padding()
+        .border(Color.black, width: 2)
+        .cornerRadius(5.0)
+        Text("Please add a Name to your todo")
+          .foregroundColor(Color.red)
+          .font(.caption2)
+          .opacity(state.isNameValid ? 0.0 : 1.0)
+      }
+      Spacer()
+      VStack(alignment: .leading) {
+        Text("Description")
+          .font(.caption2)
+        TextEditor(
+          text: Binding(
+            get: { state.description },
+            set: { updateDescription($0) }
+          )
+        ).padding()
+          .border(Color.black, width: 2)
+          .cornerRadius(5.0)
       }
       Spacer()
       Button(action: { toggleIsDone() }) {
@@ -43,7 +57,7 @@ struct TodoDetailsView: View {
       Spacer()
       HStack {
         Button("Save", action: { save() })
-          .disabled(state.canSave ? false : true)
+          .disabled(state.isEdited && state.isNameValid ? false : true)
           .padding()
         Spacer()
         Button("Remove", action: { remove() })

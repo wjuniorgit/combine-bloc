@@ -23,17 +23,20 @@ struct ContentView: View {
       Todo(
         id: UUID(),
         name: "homework",
-        isDone: false
+        isDone: false,
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       ),
       Todo(
         id: UUID(),
         name: "chores",
-        isDone: false
+        isDone: false,
+        description: "Donec ac commodo lectus. Mauris sit amet libero."
       ),
       Todo(
         id: UUID(),
         name: "breakfast",
-        isDone: true
+        isDone: true,
+        description: "In orci felis, ornare pulvinar laoreet eu, congue."
       )
     ]))
   var body: some View {

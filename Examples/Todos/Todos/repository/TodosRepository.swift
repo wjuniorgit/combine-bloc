@@ -12,11 +12,17 @@ struct Todo: Equatable, Identifiable, Hashable {
   let id: UUID
   let name: String
   let isDone: Bool
+  let description: String
 
-  func copyWith(name: String? = nil, isDone: Bool? = nil) -> Todo {
+  func copyWith(
+    name: String? = nil,
+    isDone: Bool? = nil,
+    description: String? = nil
+  ) -> Todo {
     let name = name ?? self.name
     let isDone = isDone ?? self.isDone
-    return Todo(id: id, name: name, isDone: isDone)
+    let description = description ?? self.description
+    return Todo(id: id, name: name, isDone: isDone, description: description)
   }
 }
 
@@ -29,13 +35,13 @@ protocol TodosRepository {
   func add(_ todo: Todo)
   func remove(_ id: UUID)
   func update(_ todo: Todo)
-  var todos: AnyPublisher<Result<Set<Todo>, TodosRepositoryError>, Never> {
+  var todos: AnyPublisher<Result<[Todo], TodosRepositoryError>, Never> {
     get
   }
 }
 
 final class MockTodosRepository: TodosRepository {
-  private var savedTodos: Set<Todo> {
+  private var savedTodos: [Todo] {
     didSet {
       cancellable = Just(Result.success(savedTodos))
         .assign(to: \.subject.value, on: self)
@@ -55,24 +61,24 @@ final class MockTodosRepository: TodosRepository {
     }
   }
 
-  init(savedTodos: Set<Todo>, delay: Int = 2, mustFail: Bool = false) {
+  init(savedTodos: [Todo], delay: Int = 2, mustFail: Bool = false) {
     self.savedTodos = savedTodos
     loadTodos(delay: delay, mustFail: mustFail)
   }
 
-  var todos: AnyPublisher<Result<Set<Todo>, TodosRepositoryError>, Never> {
+  var todos: AnyPublisher<Result<[Todo], TodosRepositoryError>, Never> {
     subject.eraseToAnyPublisher()
   }
 
   private var subject = CurrentValueSubject<
-    Result<Set<Todo>, TodosRepositoryError>,
+    Result<[Todo], TodosRepositoryError>,
     Never
   >(Result.failure(TodosRepositoryError.loading))
 
   private var cancellable: AnyCancellable?
 
   func add(_ todo: Todo) {
-    savedTodos.insert(todo)
+    savedTodos.append(todo)
   }
 
   func remove(_ id: UUID) {
@@ -82,7 +88,8 @@ final class MockTodosRepository: TodosRepository {
   }
 
   func update(_ todo: Todo) {
-    remove(todo.id)
-    add(todo)
+    if let index = savedTodos.firstIndex(where: { $0.id == todo.id }) {
+      savedTodos[index] = todo
+    }
   }
 }

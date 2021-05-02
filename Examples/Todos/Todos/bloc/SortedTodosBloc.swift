@@ -91,7 +91,7 @@ final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
       }
 
     cancellable = todosBloc.publisher.sink { todosState in
-      Just(.TodosStateUpdated(todosState)).subscribe(self.subscriber)
+      self.send(.TodosStateUpdated(todosState))
     }
   }
 

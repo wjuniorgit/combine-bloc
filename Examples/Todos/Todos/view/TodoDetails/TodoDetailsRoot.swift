@@ -58,6 +58,7 @@ struct TodoDetailsRoot: View {
                 editTodoBloc.send(.DoneChanged(!state.isDone))
               },
               updateName: { editTodoBloc.send(.NameChanged($0)) },
+              updateDescription: { editTodoBloc.send(.DescriptionChanged($0)) },
               save: { editTodoBloc.send(.SaveTodo) },
               remove: { editTodoBloc.send(.RemoveTodo) }
             )

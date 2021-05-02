@@ -13,6 +13,7 @@ struct TodoRemoved: Error, Equatable {}
 
 enum EditTodoEvent: Equatable {
   case NameChanged(String)
+  case DescriptionChanged(String)
   case DoneChanged(Bool)
   case TodoUpdated(Result<Todo, TodoRemoved>)
   case SaveTodo
@@ -27,31 +28,35 @@ enum EditTodoState: Equatable {
 struct ValidTodoState: Equatable {
   let name: String
   let isDone: Bool
+  let description: String
   let id: UUID
   let isSaved: Bool
-  let canSave: Bool
+  let isEdited: Bool
   let isNameValid: Bool
 
   func copyWith(
     name: String? = nil,
     isDone: Bool? = nil,
+    description: String? = nil,
     id: UUID? = nil,
     isSaved: Bool? = nil,
-    canSave: Bool? = nil,
+    isEdited: Bool? = nil,
     isNameValid: Bool? = nil
   ) -> ValidTodoState {
     let name = name ?? self.name
     let isDone = isDone ?? self.isDone
+    let description = description ?? self.description
     let id = id ?? self.id
     let isSaved = isSaved ?? self.isSaved
-    let canSave = canSave ?? self.canSave
+    let isEdited = isEdited ?? self.isEdited
     let isNameValid = isNameValid ?? self.isNameValid
     return ValidTodoState(
       name: name,
       isDone: isDone,
+      description: description,
       id: id,
       isSaved: isSaved,
-      canSave: canSave,
+      isEdited: isEdited,
       isNameValid: isNameValid
     )
   }
@@ -81,12 +86,13 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
         isDone: todo?
           .isDone ??
           false,
+        description: todo?.description ?? "",
         id: todo?
           .id ?? UUID(),
         isSaved: todo !=
           nil ? true :
           false,
-        canSave: false,
+        isEdited: false,
         isNameValid: true
       ))
 
@@ -100,7 +106,7 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
             state
               .copyWith(
                 name: name,
-                canSave: isNameValid,
+                isEdited: true,
                 isNameValid: isNameValid
               )
           ))
@@ -109,7 +115,17 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
         if case let EditTodoState.ValidTodo(state) = state {
           emit(.ValidTodo(
             state
-              .copyWith(isDone: isDone, canSave: true)
+              .copyWith(isDone: isDone, isEdited: true)
+          ))
+        }
+      case let .DescriptionChanged(description):
+        if case let EditTodoState.ValidTodo(state) = state {
+          emit(.ValidTodo(
+            state
+              .copyWith(
+                description: description,
+                isEdited: true
+              )
           ))
         }
       case let .TodoUpdated(result):
@@ -118,9 +134,10 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
           emit(.ValidTodo(ValidTodoState(
             name: todo.name,
             isDone: todo.isDone,
+            description: todo.description,
             id: todo.id,
             isSaved: true,
-            canSave: false,
+            isEdited: false,
             isNameValid: true
           )))
         case .failure:
@@ -128,18 +145,16 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
         }
       case .SaveTodo:
         if case let EditTodoState.ValidTodo(state) = state {
+          let todo = Todo(
+            id: state.id,
+            name: state.name,
+            isDone: state.isDone,
+            description: state.description
+          )
           if state.isSaved {
-            update(Todo(
-              id: state.id,
-              name: state.name,
-              isDone: state.isDone
-            ))
+            update(todo)
           } else {
-            add(Todo(
-              id: state.id,
-              name: state.name,
-              isDone: state.isDone
-            ))
+            add(todo)
           }
         }
       case .RemoveTodo:
@@ -156,16 +171,18 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
       if case let .ValidTodo(editTodoState) = self.value {
         if case let .Loaded(newTodos) = newTodosState {
           let optionalTodo: Todo? = newTodos.first { todo -> Bool in
-            todo.id == editTodoState.id
-          }
+            print(newTodosState)
+            print("COUNT \(newTodos.count)")
+            print("TODO AIDE: \(todo.id)")
+            print("STATE AIDE: \(editTodoState.id)")
 
+            return todo.id == editTodoState.id
+          }
           if let todo = optionalTodo {
-            Just(.TodoUpdated(Result.success(todo)))
-              .subscribe(self.subscriber)
+            self.send(.TodoUpdated(Result.success(todo)))
           } else {
             if editTodoState.isSaved {
-              Just(.TodoUpdated(Result.failure(TodoRemoved())))
-                .subscribe(self.subscriber)
+              self.send(.TodoUpdated(Result.failure(TodoRemoved())))
             }
           }
         }
