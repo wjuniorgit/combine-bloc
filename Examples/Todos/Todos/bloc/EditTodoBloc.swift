@@ -113,18 +113,25 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
         }
       case let .DoneChanged(isDone):
         if case let EditTodoState.ValidTodo(state) = state {
+          let isNameValid = EditTodoBloc.isNameValid(state.name)
           emit(.ValidTodo(
             state
-              .copyWith(isDone: isDone, isEdited: true)
+              .copyWith(
+                isDone: isDone,
+                isEdited: true,
+                isNameValid: isNameValid
+              )
           ))
         }
       case let .DescriptionChanged(description):
         if case let EditTodoState.ValidTodo(state) = state {
+          let isNameValid = EditTodoBloc.isNameValid(state.name)
           emit(.ValidTodo(
             state
               .copyWith(
                 description: description,
-                isEdited: true
+                isEdited: true,
+                isNameValid: isNameValid
               )
           ))
         }
@@ -171,12 +178,8 @@ final class EditTodoBloc: Bloc<EditTodoEvent, EditTodoState> {
       if case let .ValidTodo(editTodoState) = self.value {
         if case let .Loaded(newTodos) = newTodosState {
           let optionalTodo: Todo? = newTodos.first { todo -> Bool in
-            print(newTodosState)
-            print("COUNT \(newTodos.count)")
-            print("TODO AIDE: \(todo.id)")
-            print("STATE AIDE: \(editTodoState.id)")
 
-            return todo.id == editTodoState.id
+            todo.id == editTodoState.id
           }
           if let todo = optionalTodo {
             self.send(.TodoUpdated(Result.success(todo)))

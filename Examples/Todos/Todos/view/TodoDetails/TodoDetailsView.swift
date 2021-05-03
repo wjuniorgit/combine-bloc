@@ -27,26 +27,26 @@ struct TodoDetailsView: View {
         )
         .font(.title)
         .padding()
-        .border(Color.black, width: 2)
+        .border(Color.black.opacity(0.2), width: 2)
         .cornerRadius(5.0)
         Text("Please add a Name to your todo")
           .foregroundColor(Color.red)
-          .font(.caption2)
+          .font(.caption)
           .opacity(state.isNameValid ? 0.0 : 1.0)
-      }
+      }.padding()
       Spacer()
       VStack(alignment: .leading) {
         Text("Description")
-          .font(.caption2)
+          .font(.caption)
         TextEditor(
           text: Binding(
             get: { state.description },
             set: { updateDescription($0) }
           )
         ).padding()
-          .border(Color.black, width: 2)
+          .border(Color.black.opacity(0.2), width: 2)
           .cornerRadius(5.0)
-      }
+      }.padding()
       Spacer()
       Button(action: { toggleIsDone() }) {
         Image(systemName: state.isDone ? "checkmark.square" : "square")
@@ -66,6 +66,6 @@ struct TodoDetailsView: View {
           .opacity(state.isSaved ? 1.0 : 0.0)
           .padding()
       }
-    }.padding().navigationBarTitle(state.isSaved ? "Edit Todo" : "New Todo")
+    }.navigationBarTitle(state.isSaved ? "Edit Todo" : "New Todo")
   }
 }

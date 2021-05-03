@@ -36,7 +36,7 @@ final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
     case .name:
       return todos.sorted { $0.name < $1.name }
     case .done:
-      return todos.sorted { $0.isDone != $1.isDone }
+      return todos.sorted { !$0.isDone && $1.isDone }
     }
   }
 
@@ -46,7 +46,7 @@ final class SortedTodosBloc: Bloc<SortedTodosEvent, SortedTodosState> {
     super
       .init(initialValue: SortedTodosState(
         todosState: .Loading,
-        sortRule: .id
+        sortRule: .done
       )) { event, state, emit in
 
         var currentSortRule = state.sortRule

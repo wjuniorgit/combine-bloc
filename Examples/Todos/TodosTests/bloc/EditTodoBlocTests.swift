@@ -12,7 +12,7 @@ import XCTest
 
 class EditTodoBlocTests: XCTestCase {
   func testEditInitialState() {
-    let todo = Todo(id: UUID(), name: "Todo", isDone: false)
+    let todo = Todo(id: UUID(), name: "Todo", isDone: false, description: "")
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(
         savedTodos: [todo],
@@ -30,11 +30,11 @@ class EditTodoBlocTests: XCTestCase {
     let initialValue = EditTodoState
       .ValidTodo(ValidTodoState(
         name: todo.name,
-        isDone: todo
-          .isDone,
+        isDone: todo.isDone,
+        description: "",
         id: todo.id,
         isSaved: true,
-        canSave: false,
+        isEdited: false,
         isNameValid: true
       ))
 
@@ -60,10 +60,11 @@ class EditTodoBlocTests: XCTestCase {
     let initialValue = EditTodoState.ValidTodo(ValidTodoState(
       name: "",
       isDone: false,
+      description: "",
       id: id ??
         UUID(),
       isSaved: false,
-      canSave: false,
+      isEdited: false,
       isNameValid: true
     ))
 
@@ -71,7 +72,7 @@ class EditTodoBlocTests: XCTestCase {
   }
 
   func testNameChanged() {
-    let todo = Todo(id: UUID(), name: "Todo", isDone: false)
+    let todo = Todo(id: UUID(), name: "Todo", isDone: false, description: "")
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(
         savedTodos: [todo],
@@ -95,12 +96,11 @@ class EditTodoBlocTests: XCTestCase {
 
     let invalidNameState = EditTodoState.ValidTodo(ValidTodoState(
       name: "",
-      isDone: todo
-        .isDone,
-      id: todo
-        .id,
+      isDone: todo.isDone,
+      description: "",
+      id: todo.id,
       isSaved: true,
-      canSave: false,
+      isEdited: true,
       isNameValid: false
     ))
     XCTAssertEqual(editTodoBloc.value, invalidNameState)
@@ -110,16 +110,17 @@ class EditTodoBlocTests: XCTestCase {
       name: "T",
       isDone: todo
         .isDone,
+      description: "",
       id: todo.id,
       isSaved: true,
-      canSave: true,
+      isEdited: true,
       isNameValid: true
     ))
     XCTAssertEqual(editTodoBloc.value, validNameState)
   }
 
   func testDoneChanged() {
-    let todo = Todo(id: UUID(), name: "Todo", isDone: false)
+    let todo = Todo(id: UUID(), name: "Todo", isDone: false, description: "")
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(
         savedTodos: [todo],
@@ -138,9 +139,10 @@ class EditTodoBlocTests: XCTestCase {
       .ValidTodo(ValidTodoState(
         name: "Todo",
         isDone: true,
+        description: "",
         id: todo.id,
         isSaved: true,
-        canSave: true,
+        isEdited: true,
         isNameValid: true
       ))
 

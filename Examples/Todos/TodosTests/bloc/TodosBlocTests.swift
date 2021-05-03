@@ -57,14 +57,24 @@ class TodosBlocTests: XCTestCase {
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(savedTodos: [], delay: 0))
     XCTAssertEqual(todosBloc.value, .Loading)
-    let firstTodo = Todo(id: UUID(), name: "First", isDone: false)
+    let firstTodo = Todo(
+      id: UUID(),
+      name: "First",
+      isDone: false,
+      description: ""
+    )
 
     Just(.Add(firstTodo)).subscribe(todosBloc.subscriber)
     XCTAssertEqual(todosBloc.value, .Loaded([firstTodo]))
   }
 
   func testRemoveOneTodo() {
-    let firstTodo = Todo(id: UUID(), name: "First", isDone: false)
+    let firstTodo = Todo(
+      id: UUID(),
+      name: "First",
+      isDone: false,
+      description: ""
+    )
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(
         savedTodos: [firstTodo],
@@ -78,8 +88,18 @@ class TodosBlocTests: XCTestCase {
 
   func testEditTodoName() {
     let todoId = UUID()
-    let initialTodo = Todo(id: todoId, name: "First", isDone: false)
-    let finalTodo = Todo(id: todoId, name: "Second", isDone: false)
+    let initialTodo = Todo(
+      id: todoId,
+      name: "First",
+      isDone: false,
+      description: ""
+    )
+    let finalTodo = Todo(
+      id: todoId,
+      name: "Second",
+      isDone: false,
+      description: ""
+    )
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(
         savedTodos: [initialTodo],
@@ -94,8 +114,18 @@ class TodosBlocTests: XCTestCase {
 
   func testSequentialEditTodoName() {
     let todoId = UUID()
-    let initialTodo = Todo(id: todoId, name: "F", isDone: false)
-    let finalTodo = Todo(id: todoId, name: "First", isDone: false)
+    let initialTodo = Todo(
+      id: todoId,
+      name: "F",
+      isDone: false,
+      description: ""
+    )
+    let finalTodo = Todo(
+      id: todoId,
+      name: "First",
+      isDone: false,
+      description: ""
+    )
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(
         savedTodos: [initialTodo],
@@ -124,8 +154,18 @@ class TodosBlocTests: XCTestCase {
 
   func testEditTodoIdDone() {
     let todoId = UUID()
-    let initialTodo = Todo(id: todoId, name: "First", isDone: false)
-    let finalTodo = Todo(id: todoId, name: "First", isDone: true)
+    let initialTodo = Todo(
+      id: todoId,
+      name: "First",
+      isDone: false,
+      description: ""
+    )
+    let finalTodo = Todo(
+      id: todoId,
+      name: "First",
+      isDone: true,
+      description: ""
+    )
     let todosBloc =
       TodosBloc(repository: MockTodosRepository(
         savedTodos: [initialTodo],

@@ -14,23 +14,23 @@ class FilteredTodosBlocTests: XCTestCase {
   let savedTodos = [
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000001"
-    )!, name: "First", isDone: true),
+    )!, name: "First", isDone: true, description: ""),
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000002"
-    )!, name: "Second", isDone: false),
+    )!, name: "Second", isDone: false, description: ""),
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000003"
-    )!, name: "Third", isDone: true),
+    )!, name: "Third", isDone: true, description: ""),
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000004"
-    )!, name: "Fourth", isDone: true)
+    )!, name: "Fourth", isDone: true, description: "")
   ]
 
   func testInitialFilterRule() {
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )
@@ -45,26 +45,27 @@ class FilteredTodosBlocTests: XCTestCase {
   func testFilterByNone() {
     let todosIdNotFiltered = [
       Todo(id: UUID(
-        uuidString: "00000000-0000-0000-0000-000000000001"
-      )!, name: "First", isDone: true),
-      Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000002"
-      )!, name: "Second", isDone: false),
+      )!, name: "Second", isDone: false, description: ""),
+      Todo(id: UUID(
+        uuidString: "00000000-0000-0000-0000-000000000001"
+      )!, name: "First", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000003"
-      )!, name: "Third", isDone: true),
+      )!, name: "Third", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000004"
-      )!, name: "Fourth", isDone: true)
+      )!, name: "Fourth", isDone: true, description: "")
     ]
 
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )
+
     let filteredTodosBloc =
       FilteredTodosBloc(sortedTodosBloc: sortedTodosBloc)
 
@@ -78,6 +79,7 @@ class FilteredTodosBlocTests: XCTestCase {
         filterRule: .none
       )
     }
+    Just(.UpdateFilterRule(.none)).subscribe(filteredTodosBloc.subscriber)
     let expectation = XCTNSPredicateExpectation(
       predicate: predicate,
       object: sortedTodosBloc
@@ -95,19 +97,19 @@ class FilteredTodosBlocTests: XCTestCase {
     let doneTodosIdFiltered = [
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000001"
-      )!, name: "First", isDone: true),
+      )!, name: "First", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000003"
-      )!, name: "Third", isDone: true),
+      )!, name: "Third", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000004"
-      )!, name: "Fourth", isDone: true)
+      )!, name: "Fourth", isDone: true, description: "")
     ]
 
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )
@@ -142,13 +144,13 @@ class FilteredTodosBlocTests: XCTestCase {
     let notDoneTodosIdFiltered = [
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000002"
-      )!, name: "Second", isDone: false)
+      )!, name: "Second", isDone: false, description: "")
     ]
 
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )

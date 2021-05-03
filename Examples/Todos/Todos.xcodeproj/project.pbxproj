@@ -170,6 +170,7 @@
 				55D103A0263F059A0021E8D7 /* MenuItem.swift */,
 				55D103A4263F06050021E8D7 /* SortItem.swift */,
 				55D103A8263F07070021E8D7 /* FilterItem.swift */,
+				55EB5DFD261BAD2200EBD564 /* TodoItemView.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -179,7 +180,6 @@
 			children = (
 				55D1039F263F057A0021E8D7 /* components */,
 				55EB5DF9261BACEE00EBD564 /* TodosListView.swift */,
-				55EB5DFD261BAD2200EBD564 /* TodoItemView.swift */,
 			);
 			path = TodosList;
 			sourceTree = "<group>";

@@ -14,29 +14,29 @@ class SortedTodosBlocTests: XCTestCase {
   let savedTodos = [
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000001"
-    )!, name: "First", isDone: true),
+    )!, name: "First", isDone: true, description: ""),
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000002"
-    )!, name: "Second", isDone: false),
+    )!, name: "Second", isDone: false, description: ""),
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000004"
-    )!, name: "Fourth", isDone: true),
+    )!, name: "Fourth", isDone: true, description: ""),
     Todo(id: UUID(
       uuidString: "00000000-0000-0000-0000-000000000003"
-    )!, name: "Third", isDone: true)
+    )!, name: "Third", isDone: true, description: "")
   ]
 
   func testInitialSortRule() {
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )
     XCTAssertEqual(
       sortedTodosBloc.value,
-      .init(todosState: .Loading, sortRule: .id)
+      .init(todosState: .Loading, sortRule: .done)
     )
   }
 
@@ -44,28 +44,28 @@ class SortedTodosBlocTests: XCTestCase {
     let savedTodosIdSorted = [
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000001"
-      )!, name: "First", isDone: true),
+      )!, name: "First", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000002"
-      )!, name: "Second", isDone: false),
+      )!, name: "Second", isDone: false, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000003"
-      )!, name: "Third", isDone: true),
+      )!, name: "Third", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000004"
-      )!, name: "Fourth", isDone: true)
+      )!, name: "Fourth", isDone: true, description: "")
     ]
 
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )
     XCTAssertEqual(
       sortedTodosBloc.value,
-      .init(todosState: .Loading, sortRule: .id)
+      .init(todosState: .Loading, sortRule: .done)
     )
     let predicate = NSPredicate { _, _ in
       sortedTodosBloc.value == .init(
@@ -73,6 +73,7 @@ class SortedTodosBlocTests: XCTestCase {
         sortRule: .id
       )
     }
+    Just(.UpdateSortRule(.id)).subscribe(sortedTodosBloc.subscriber)
     let expectation = XCTNSPredicateExpectation(
       predicate: predicate,
       object: sortedTodosBloc
@@ -90,28 +91,28 @@ class SortedTodosBlocTests: XCTestCase {
     let savedTodosNameSorted = [
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000001"
-      )!, name: "First", isDone: true),
+      )!, name: "First", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000004"
-      )!, name: "Fourth", isDone: true),
+      )!, name: "Fourth", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000002"
-      )!, name: "Second", isDone: false),
+      )!, name: "Second", isDone: false, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000003"
-      )!, name: "Third", isDone: true)
+      )!, name: "Third", isDone: true, description: "")
     ]
 
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )
     XCTAssertEqual(
       sortedTodosBloc.value,
-      .init(todosState: .Loading, sortRule: .id)
+      .init(todosState: .Loading, sortRule: .done)
     )
     let predicate = NSPredicate { _, _ in
       sortedTodosBloc.value == .init(
@@ -136,29 +137,29 @@ class SortedTodosBlocTests: XCTestCase {
   func testSortByIsDone() {
     let savedTodosDoneSorted = [
       Todo(id: UUID(
+        uuidString: "00000000-0000-0000-0000-000000000002"
+      )!, name: "Second", isDone: false, description: ""),
+      Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000001"
-      )!, name: "First", isDone: true),
+      )!, name: "First", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000004"
-      )!, name: "Fourth", isDone: true),
+      )!, name: "Fourth", isDone: true, description: ""),
       Todo(id: UUID(
         uuidString: "00000000-0000-0000-0000-000000000003"
-      )!, name: "Third", isDone: true),
-      Todo(id: UUID(
-        uuidString: "00000000-0000-0000-0000-000000000002"
-      )!, name: "Second", isDone: false)
+      )!, name: "Third", isDone: true, description: "")
     ]
 
     let sortedTodosBloc =
       SortedTodosBloc(
         todosBloc: TodosBloc(repository: MockTodosRepository(
-          savedTodos: Set(savedTodos),
+          savedTodos: Array(savedTodos),
           delay: 0
         ))
       )
     XCTAssertEqual(
       sortedTodosBloc.value,
-      .init(todosState: .Loading, sortRule: .id)
+      .init(todosState: .Loading, sortRule: .done)
     )
     let predicate = NSPredicate { _, _ in
       sortedTodosBloc.value == .init(

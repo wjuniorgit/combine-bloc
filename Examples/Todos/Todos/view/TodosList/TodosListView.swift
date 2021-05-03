@@ -47,10 +47,16 @@ struct TodosListView: View {
         }
       }.padding()
       Menu("Filter") {
-        FilterItem(filterRule: .none, selectedFilterRule: selectedFilterRule) {
+        FilterItem(
+          filterRule: .none,
+          selectedFilterRule: selectedFilterRule
+        ) {
           filter($0)
         }
-        FilterItem(filterRule: .done, selectedFilterRule: selectedFilterRule) {
+        FilterItem(
+          filterRule: .done,
+          selectedFilterRule: selectedFilterRule
+        ) {
           filter($0)
         }
         FilterItem(
