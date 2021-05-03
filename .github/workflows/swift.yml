@@ -17,3 +17,5 @@ jobs:
       run: swift build -v
     - name: Run tests
       run: swift test -v
+    - name: Run Todos tests
+      run: xcodebuild clean test -workspace 'CombineBloc.xcworkspace' -scheme 'Todos' -sdk iphonesimulator -destination 'name=iPhone 8'
