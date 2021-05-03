@@ -19,3 +19,7 @@ jobs:
       run: swift test -v
     - name: Run Todos tests
       run: xcodebuild clean test -workspace 'CombineBloc.xcworkspace' -scheme 'Todos' -sdk iphonesimulator -destination 'name=iPhone 8'
+    - name: Run Login tests
+      run: xcodebuild clean test -workspace 'CombineBloc.xcworkspace' -scheme 'Login' -sdk iphonesimulator -destination 'name=iPhone 8'
+    - name: Run Counter tests
+      run: xcodebuild clean test -workspace 'CombineBloc.xcworkspace' -scheme 'Counter' -sdk iphonesimulator -destination 'name=iPhone 8'
